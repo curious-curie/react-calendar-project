@@ -66,14 +66,15 @@ export default function schedules(state = initialState, action) {
         ...state,
         schedules: action.payload,
       };
-    case CREATE_SCHEDULE:
+    case CREATE_SCHEDULE: {
       const newSchedules = [...state.schedules, action.payload];
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
       };
-    case DELETE_SCHEDULE:
+    }
+    case DELETE_SCHEDULE: {
       const newSchedules = state.schedules.filter(
         schedule.id !== action.payload
       );
@@ -82,7 +83,8 @@ export default function schedules(state = initialState, action) {
         ...state,
         schedules: newSchedules,
       };
-    case EDIT_SCHEDULE:
+    }
+    case EDIT_SCHEDULE: {
       const newSchedules = state.schedules.map((schedule) => {
         if (schedule.id === action.payload.id) {
           schedule = { ...action.payload };
@@ -94,6 +96,7 @@ export default function schedules(state = initialState, action) {
         ...state,
         schedules: newSchedules,
       };
+    }
     case GET_LABELS:
       return {
         ...state,

@@ -64,11 +64,17 @@ export default function LabelPicker({ handleSelect, selected }) {
 
   const dispatch = useDispatch();
   const labels = useSelector((state) => state.schedules.labels);
+  let lastId = labels[labels.length - 1].id;
   const [newLabel, setNewLabel] = useState({
     title: '',
     color: '',
-    id: labels[labels.length - 1].id + 1,
+    id: lastId + 1,
   });
+
+  useEffect(() => {
+    setNewLabel({ ...newLabel, id: ++lastId });
+  }, [lastId]);
+
   const [isCreate, setIsCreate] = useState(false);
 
   const setColor = (color) => {
@@ -80,7 +86,6 @@ export default function LabelPicker({ handleSelect, selected }) {
   };
 
   const handleCreateLabel = () => {
-    console.log(newLabel);
     if (newLabel.title) {
       dispatch(createLabel(newLabel));
     }
