@@ -60,7 +60,6 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
   }, []);
   const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
   const defaultColor = '#24bca8';
-
   const dispatch = useDispatch();
   const labels = useSelector((state) => state.schedules.labels);
   let lastId = labels[labels.length - 1].id;
@@ -69,12 +68,11 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
     color: null,
     id: lastId + 1,
   });
+  const [isCreate, setIsCreate] = useState(false);
 
   useEffect(() => {
     setNewLabel({ ...newLabel, id: ++lastId });
   }, [lastId]);
-
-  const [isCreate, setIsCreate] = useState(false);
 
   const setColor = (color) => {
     setNewLabel({ ...newLabel, color });
@@ -87,6 +85,8 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
   const handleCreateLabel = () => {
     if (newLabel.title) {
       dispatch(createLabel(newLabel));
+      setNewLabel({ ...newLabel, title: '' });
+      setIsCreate(false);
     }
   };
 
