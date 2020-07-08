@@ -4,7 +4,6 @@ import { isBefore } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from './LabelPicker';
 import styled from 'styled-components';
-import { createSchedule } from '../modules/schedules';
 
 const FormWrapper = styled.div`
   padding: 20px;
@@ -58,7 +57,7 @@ const BottomButton = styled.button`
   display: flex;
   justify-content: center;
 `;
-function ScheduleForm() {
+function ScheduleForm({ handleSubmit, presetData }) {
   const [schedule, setSchedule] = useState({
     title: '',
     memo: '',
@@ -81,7 +80,7 @@ function ScheduleForm() {
     setSchedule((schedule) => ({ ...schedule, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
     if (
@@ -90,7 +89,7 @@ function ScheduleForm() {
       schedule.startDate &&
       isDateValid
     ) {
-      dispatch(createSchedule(schedule));
+      handleSubmit(schedule);
     }
   };
 
@@ -103,7 +102,7 @@ function ScheduleForm() {
   };
   return (
     <FormWrapper>
-      <form name='form' onSubmit={handleSubmit}>
+      <form name='form' onSubmit={onSubmit}>
         <div>
           제목
           <FormInput
