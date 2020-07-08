@@ -52,14 +52,7 @@ export default function LabelPicker({ handleSelect, selected }) {
   useEffect(() => {
     handleSelect(labels[0]);
   }, []);
-  const colorList = [
-    '#b49fdc',
-    '#c5ebfe',
-    '#fefd97',
-    '#a5f8ce',
-    '#fec9a7',
-    '#f197c0',
-  ];
+  const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
   const defaultColor = '#24bca8';
 
   const dispatch = useDispatch();
@@ -67,7 +60,7 @@ export default function LabelPicker({ handleSelect, selected }) {
   let lastId = labels[labels.length - 1].id;
   const [newLabel, setNewLabel] = useState({
     title: '',
-    color: '',
+    color: null,
     id: lastId + 1,
   });
 
@@ -94,12 +87,7 @@ export default function LabelPicker({ handleSelect, selected }) {
   const palette = (
     <PaletteContainer>
       {colorList.map((color) => (
-        <ColorContainer
-          selected={color === newLabel.color}
-          onClick={() => setColor(color)}
-          color={color}
-          key={color}
-        />
+        <ColorContainer selected={color === newLabel.color} onClick={() => setColor(color)} color={color} key={color} />
       ))}
     </PaletteContainer>
   );
@@ -108,8 +96,8 @@ export default function LabelPicker({ handleSelect, selected }) {
     <div>
       {palette}
       <ListWrapper>
-        <TitleInput type='text' name='name' onChange={setTitle} />
-        <LabelButton type='button' onClick={handleCreateLabel}>
+        <TitleInput type="text" name="name" onChange={setTitle} />
+        <LabelButton type="button" onClick={handleCreateLabel}>
           만들기
         </LabelButton>
       </ListWrapper>
@@ -118,17 +106,14 @@ export default function LabelPicker({ handleSelect, selected }) {
 
   const labelList = labels.map((label) => (
     <LabelWrapper key={label.id} onClick={() => handleSelect(label)}>
-      <ColorContainer
-        selected={selected && selected.id === label.id}
-        color={label.color ?? defaultColor}
-      />
+      <ColorContainer selected={selected && selected.id === label.id} color={label.color ?? defaultColor} />
       <span>{label.title}</span>
     </LabelWrapper>
   ));
   return (
     <div>
       <ListWrapper>{labelList}</ListWrapper>
-      <LabelButton type='button' onClick={() => setIsCreate(!isCreate)}>
+      <LabelButton type="button" onClick={() => setIsCreate(!isCreate)}>
         레이블 추가
       </LabelButton>
       {isCreate && newLabelForm}
