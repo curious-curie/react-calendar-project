@@ -39,6 +39,10 @@ const DateWrapper = styled.div`
   `}
 `;
 
+const DateField = styled.div`
+  margin: 0 16px;
+`;
+
 const CheckWrapper = styled.div`
   text-align: right;
 `;
@@ -56,6 +60,12 @@ const BottomButton = styled.button`
   display: flex;
   justify-content: center;
 `;
+
+const Field = styled.span`
+  margin: 8px;
+  padding: 8px;
+`;
+
 function ScheduleForm({ handleSubmit, presetData, readOnly }) {
   //TODO: 100개 제한 체크 / prefill info when editing / 반복일정
   const uniqueId = require('lodash.uniqueid');
@@ -102,29 +112,47 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
       <form name="form" onSubmit={onSubmit}>
         <div>
           제목
-          <FormInput type="text" name="title" onChange={handleChange} invalid={submitted && !schedule.title} />
+          {readOnly ? (
+            <Field>{presetData.title}</Field>
+          ) : (
+            <FormInput type="text" name="title" onChange={handleChange} invalid={submitted && !schedule.title} />
+          )}
         </div>
         <div>
           메모
-          <MemoInput type="text" name="memo" onChange={handleChange} />
+          {readOnly ? <Field>{presetData.memo}</Field> : <MemoInput type="text" name="memo" onChange={handleChange} />}
         </div>
         <DateWrapper invalid={submitted && (!schedule.startDate || !isDateValid)}>
           시작일
-          <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="startDate" />
+          {readOnly ? (
+            <DateField>{presetData.startDate}</DateField>
+          ) : (
+            <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="startDate" />
+          )}
         </DateWrapper>
         <DateWrapper invalid={submitted && (!schedule.endDate || !isDateValid)}>
           종료일
-          <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="endDate" />
+          {readOnly ? (
+            <DateField>{presetData.endDate}</DateField>
+          ) : (
+            <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="endDate" />
+          )}
         </DateWrapper>
-        <CheckWrapper>
-          하루 종일
-          <input type="checkbox" onChange={(e) => toggleAllDay(e.currentTarget.checked)} checked={isAllDay} />
-        </CheckWrapper>
+        {!readOnly && (
+          <CheckWrapper>
+            하루 종일
+            <input type="checkbox" onChange={(e) => toggleAllDay(e.currentTarget.checked)} checked={isAllDay} />
+          </CheckWrapper>
+        )}
         <div>
           레이블
-          <LabelPicker handleSelect={handleSelectLabel} selected={schedule.label} />
+          <LabelPicker
+            readOnly={readOnly}
+            handleSelect={handleSelectLabel}
+            selected={readOnly ? presetData.label : schedule.label}
+          />
         </div>
-        <BottomButton>만들기</BottomButton>
+        {!readOnly && <BottomButton>만들기</BottomButton>}
       </form>
     </FormWrapper>
   );
