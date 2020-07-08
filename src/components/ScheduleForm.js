@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { isBefore } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from './LabelPicker';
@@ -57,23 +56,24 @@ const BottomButton = styled.button`
   display: flex;
   justify-content: center;
 `;
-function ScheduleForm({ handleSubmit, presetData }) {
+function ScheduleForm({ handleSubmit, presetData, readOnly }) {
+  //TODO: 100개 제한 체크 / prefill info when editing / 반복일정
+  const uniqueId = require('lodash.uniqueid');
   const [schedule, setSchedule] = useState({
     title: '',
     memo: '',
     startDate: '',
     endDate: '',
     label: null,
+    id: uniqueId(),
   });
   const [isAllDay, setIsAllDay] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const isDateValid = useMemo(
-    () => isBefore(new Date(schedule.startDate), new Date(schedule.endDate)),
-    [schedule.startDate, schedule.endDate]
-  );
+  const isDateValid = useMemo(() => isBefore(new Date(schedule.startDate), new Date(schedule.endDate)), [
+    schedule.startDate,
+    schedule.endDate,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,12 +83,9 @@ function ScheduleForm({ handleSubmit, presetData }) {
   const onSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    if (
-      schedule.title &&
-      schedule.endDate &&
-      schedule.startDate &&
-      isDateValid
-    ) {
+    if (schedule.title && schedule.endDate && schedule.startDate && isDateValid) {
+      const id = uniqueId();
+      setSchedule({ ...schedule, id: id });
       handleSubmit(schedule);
     }
   };
@@ -102,52 +99,30 @@ function ScheduleForm({ handleSubmit, presetData }) {
   };
   return (
     <FormWrapper>
-      <form name='form' onSubmit={onSubmit}>
+      <form name="form" onSubmit={onSubmit}>
         <div>
           제목
-          <FormInput
-            type='text'
-            name='title'
-            onChange={handleChange}
-            invalid={submitted && !schedule.title}
-          />
+          <FormInput type="text" name="title" onChange={handleChange} invalid={submitted && !schedule.title} />
         </div>
         <div>
           메모
-          <MemoInput type='text' name='memo' onChange={handleChange} />
+          <MemoInput type="text" name="memo" onChange={handleChange} />
         </div>
-        <DateWrapper
-          invalid={submitted && (!schedule.startDate || !isDateValid)}
-        >
+        <DateWrapper invalid={submitted && (!schedule.startDate || !isDateValid)}>
           시작일
-          <DateTimePicker
-            isAllDay={isAllDay}
-            handleChange={handleChange}
-            name='startDate'
-          />
+          <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="startDate" />
         </DateWrapper>
         <DateWrapper invalid={submitted && (!schedule.endDate || !isDateValid)}>
           종료일
-          <DateTimePicker
-            isAllDay={isAllDay}
-            handleChange={handleChange}
-            name='endDate'
-          />
+          <DateTimePicker isAllDay={isAllDay} handleChange={handleChange} name="endDate" />
         </DateWrapper>
         <CheckWrapper>
           하루 종일
-          <input
-            type='checkbox'
-            onChange={(e) => toggleAllDay(e.currentTarget.checked)}
-            checked={isAllDay}
-          />
+          <input type="checkbox" onChange={(e) => toggleAllDay(e.currentTarget.checked)} checked={isAllDay} />
         </CheckWrapper>
         <div>
           레이블
-          <LabelPicker
-            handleSelect={handleSelectLabel}
-            selected={schedule.label}
-          />
+          <LabelPicker handleSelect={handleSelectLabel} selected={schedule.label} />
         </div>
         <BottomButton>만들기</BottomButton>
       </form>
