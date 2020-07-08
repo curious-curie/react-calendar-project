@@ -14,11 +14,18 @@
   "license": "ISC",
   "repository": "https://oss.navercorp.com/selective-2020-internship/curie-yoo",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
+    "date-fns": "^2.14.0",
     "html-webpack-plugin": "^4.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
     "style-loader": "^1.2.1"
   },
   "devDependencies": {
