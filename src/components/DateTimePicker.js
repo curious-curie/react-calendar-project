@@ -4,25 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 
-const useStyles = makeStyles((theme) => ({
-  container: {},
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 250,
-  },
-}));
-
 const Container = styled.div`
-  margin: 4px,
+  margin: 0 8px;
   display: flex,
   flexWrap: wrap,    
 `;
 
 const StyledTextField = styled(TextField)`
-    margin-left: theme.spacing(1),
-    margin-right: theme.spacing(1),
-    width: 250,
+  margin: 0 16px;
+  width: 250;
 `;
 
 export default function DateAndTimePickers({
@@ -31,8 +21,6 @@ export default function DateAndTimePickers({
   name,
   handleChange,
 }) {
-  const classes = useStyles();
-
   const inputType = isAllDay ? 'date' : 'datetime-local';
   const defaultValue = isAllDay
     ? format(new Date(), 'yyyy-MM-dd')
@@ -44,7 +32,6 @@ export default function DateAndTimePickers({
         id={inputType}
         type={inputType}
         // defaultValue={defaultValue}
-        className={classes.textField}
         name={name}
         InputLabelProps={{
           shrink: true,
