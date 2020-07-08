@@ -42,13 +42,19 @@ const LabelWrapper = styled.div`
   align-items: center;
 `;
 
+const SelectedLabelWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 const ListWrapper = styled.div`
   margin: 8px;
   display: flex;
   justify-content: center;
 `;
 
-export default function LabelPicker({ handleSelect, selected }) {
+export default function LabelPicker({ readOnly, handleSelect, selected }) {
   useEffect(() => {
     handleSelect(labels[0]);
   }, []);
@@ -112,11 +118,21 @@ export default function LabelPicker({ handleSelect, selected }) {
   ));
   return (
     <div>
-      <ListWrapper>{labelList}</ListWrapper>
-      <LabelButton type="button" onClick={() => setIsCreate(!isCreate)}>
-        레이블 추가
-      </LabelButton>
-      {isCreate && newLabelForm}
+      {readOnly ? (
+        <SelectedLabelWrapper key={selected.id}>
+          <ColorContainer color={selected.color ?? defaultColor} />
+          <span>{selected.title}</span>
+        </SelectedLabelWrapper>
+      ) : (
+        <ListWrapper>{labelList}</ListWrapper>
+      )}
+
+      {!readOnly && (
+        <LabelButton type="button" onClick={() => setIsCreate(!isCreate)}>
+          레이블 추가
+        </LabelButton>
+      )}
+      {!readOnly && isCreate && newLabelForm}
     </div>
   );
 }
