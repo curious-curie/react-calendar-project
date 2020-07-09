@@ -104,7 +104,7 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
       <ListWrapper>
         <TitleInput type="text" name="name" onChange={setTitle} />
         <LabelButton type="button" onClick={handleCreateLabel}>
-          완료!
+          만들기
         </LabelButton>
       </ListWrapper>
     </div>
