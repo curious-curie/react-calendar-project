@@ -1,18 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import * as api from '../apis';
-
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { addMonths } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { addMonths, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+import { createMonthArray } from '@/utils/dateHelpers';
+import * as api from '@/apis';
+import { getFilteredSchedules } from '@/selectors';
 
 export default function ScheduleListContainer() {
   const [currentSchedules, setCurrentSchedules] = useState([]);
-  const currentDate = new Date();
+  const [listDates, setListDates] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [dates, setDates] = useState([new Date()]);
+  const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
 
-  const { schedules } = useSelector((state) => state.schedules);
   useEffect(() => {
-    const newList = api.getEventsByMonth(currentDate);
-    setCurrentSchedules({ ...newList });
-  }, [schedules]);
+    const daysOfMonth = createMonthArray(currentDate);
+    setListDates([...listDates, ...daysOfMonth]);
+  }, [currentDate]);
 
-  return <div></div>;
+  useEffect(() => {
+    const newList = api.getSchedules(dates, filteredSchedules);
+    setCurrentSchedules({ ...newList });
+  }, [dates, filteredSchedules]);
+
+  const addMonth = () => {
+    const newDate = addMonths(currentDate, 1);
+    setCurrentDate(newDate);
+    setDates([...dates, newDate]);
+  };
+
+  const scheduleList = useMemo(
+    () =>
+      listDates.map((date) => (
+        <div key={date}>
+          {date}
+          {currentSchedules[date] ? (
+            <ul>
+              {currentSchedules[date].map((schedule) => (
+                <Link key={schedule.id} to={`/${schedule.id}`}>
+                  <li>{schedule.title}</li>
+                </Link>
+              ))}
+            </ul>
+          ) : (
+            'empty'
+          )}
+        </div>
+      )),
+    [currentSchedules, filteredSchedules, listDates]
+  );
+
+  return (
+    <div>
+      {filteredSchedules.length}
+      {scheduleList}
+      <button onClick={addMonth}>+1</button>
+    </div>
+  );
 }
