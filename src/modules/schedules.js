@@ -1,17 +1,11 @@
+import { createIntervalArray } from '@/utils/dateHelpers';
 const GET_SCHEDULES = 'GET_SCHEDULES';
 const CREATE_SCHEDULE = 'CREATE_SCHEDULE';
 const DELETE_SCHEDULE = 'DELETE_SCHEDULE';
 const EDIT_SCHEDULE = 'EDIT_SCHEDULE';
 
-const GET_LABELS = 'GET_LABELS';
-const CREATE_LABEL = 'CREATE_LABEL';
-
-const APPLY_FILTER = 'APPLY_FILTER';
-const REMOVE_FILTER = 'REMOVE_FILTER';
-const RESET_FILTER = 'RESET_FILTER';
-
 export const getSchedules = () => {
-  const schedules = JSON.parse(localStorage.getItem('schedules'));
+  // const schedules = JSON.parse(localStorage.getItem('schedules'));
   return {
     type: GET_SCHEDULES,
     payload: schedules,
@@ -32,25 +26,10 @@ export const editSchedule = (schedule) => {
   };
 };
 
-export const deleteSchedule = (id) => {
+export const deleteSchedule = (schedule) => {
   return {
     type: DELETE_SCHEDULE,
-    payload: id,
-  };
-};
-
-export const getLabels = () => {
-  // const labels = JSON.parse(localStorage.getItem('labels'));
-  return {
-    type: GET_LABELS,
-    payload: labels,
-  };
-};
-
-export const createLabel = (label) => {
-  return {
-    type: CREATE_LABEL,
-    payload: label,
+    payload: schedule,
   };
 };
 
@@ -81,18 +60,7 @@ const initialState = {
       title: '2',
     },
   ],
-  labels: [
-    {
-      id: 1,
-      title: '기본',
-    },
-    {
-      id: 2,
-      title: '회사',
-      color: '#c5ebfe',
-    },
-  ],
-  labelFilter: [],
+  scheduleCount: [],
 };
 
 export default function schedules(state = initialState, action) {
@@ -103,62 +71,53 @@ export default function schedules(state = initialState, action) {
         schedules: action.payload,
       };
     case CREATE_SCHEDULE: {
+      const newDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
+      const count = { ...state.scheduleCount };
+      newDate.forEach((date) => {
+        count[date] ? count[date]++ : (count[date] = 1);
+      });
       const newSchedules = [...state.schedules, action.payload];
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
+        scheduleCount: count,
       };
     }
     case DELETE_SCHEDULE: {
-      const newSchedules = state.schedules.filter((schedule) => schedule.id !== action.payload);
+      const newDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
+      const count = { ...state.scheduleCount };
+      newDate.forEach((date) => count[date]--);
+      const newSchedules = state.schedules.filter((schedule) => schedule.id !== action.payload.id);
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
+        scheduleCount: count,
       };
     }
     case EDIT_SCHEDULE: {
+      let prevDate, nextDate;
+      const count = { ...state.scheduleCount };
       const newSchedules = state.schedules.map((schedule) => {
         if (+schedule.id === +action.payload.id) {
+          prevDate = createIntervalArray([schedule.startDate, schedule.endDate]);
+          nextDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
           schedule = { ...action.payload };
         }
         return schedule;
+      });
+      prevDate.forEach((date) => count[date]--);
+      nextDate.forEach((date) => {
+        count[date] ? count[date]++ : (count[date] = 1);
       });
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
+        scheduleCount: count,
       };
     }
-    case GET_LABELS:
-      return {
-        ...state,
-        labels: action.payload,
-      };
-    case CREATE_LABEL:
-      const newLabels = [...state.labels, action.payload];
-      // localStorage.setItem('labels', JSON.stringify(newLabels));
-      return {
-        ...state,
-        labels: newLabels,
-      };
-    case APPLY_FILTER:
-      return {
-        ...state,
-        labelFilter: [...state.labelFilter, action.payload],
-      };
-    case REMOVE_FILTER:
-      const newFilters = labelFilter.filter((label) => label.id !== action.payload.id);
-      return {
-        ...state,
-        labelFilter: newFilters,
-      };
-    case RESET_FILTER:
-      return {
-        ...state,
-        labelFilter: [],
-      };
     default:
       return state;
   }
