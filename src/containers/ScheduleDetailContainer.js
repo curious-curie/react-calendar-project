@@ -3,8 +3,17 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/ScheduleForm';
 import { editSchedule, deleteSchedule } from '../modules/schedules';
-
 import * as api from '../apis';
+import styled from 'styled-components';
+
+const EditButton = styled.button`
+  padding: 8px;
+  text-align: center;
+  background: #ececec;
+  border: none;
+  margin: 0 6px;
+  border-radius: 8px;
+`;
 
 function ScheduleDetailContainer({ match, history }) {
   const { id } = match.params;
@@ -33,9 +42,13 @@ function ScheduleDetailContainer({ match, history }) {
     <div>
       {schedule.id && (
         <>
-          <button onClick={() => setIsEditing(!isEditing)}>수정</button>
-          <button onClick={() => handleDelete()}>삭제</button>
           <ScheduleForm presetData={schedule} readOnly={!isEditing} handleSubmit={handleEdit} />
+          {!isEditing && (
+            <>
+              <EditButton onClick={() => setIsEditing(!isEditing)}>수정</EditButton>
+              <EditButton onClick={() => handleDelete()}>삭제</EditButton>
+            </>
+          )}
         </>
       )}
     </div>

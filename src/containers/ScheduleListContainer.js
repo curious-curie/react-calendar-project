@@ -5,6 +5,7 @@ import { addMonths, startOfMonth, endOfMonth, eachDayOfInterval, format } from '
 import { createMonthArray } from '@/utils/dateHelpers';
 import * as api from '@/apis';
 import { getFilteredSchedules } from '@/selectors';
+import LabelFilters from '../components/LabelFilters';
 
 export default function ScheduleListContainer() {
   const [currentSchedules, setCurrentSchedules] = useState([]);
@@ -52,7 +53,7 @@ export default function ScheduleListContainer() {
 
   return (
     <div>
-      {filteredSchedules.length}
+      <LabelFilters />
       {scheduleList}
       <button onClick={addMonth}>+1</button>
     </div>

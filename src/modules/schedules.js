@@ -35,30 +35,6 @@ export const deleteSchedule = (schedule) => {
 
 const initialState = {
   schedules: [
-    // {
-    //   end: '2020-07-17',
-    //   id: 1,
-    //   label: { id: 1, title: '기본' },
-    //   memo: '1234',
-    //   start: '2020-07-01',
-    //   title: '기본',
-    // },
-    // {
-    //   end: '2020-07-01',
-    //   id: 2,
-    //   label: { id: 2, title: '회사' },
-    //   memo: '회사일임',
-    //   start: '2020-06-11',
-    //   title: '회사일',
-    // },
-    // {
-    //   end: '2020-09-13T13:00',
-    //   id: 3,
-    //   label: { id: 2, title: '회사' },
-    //   memo: '회사일임',
-    //   start: '2020-07-01T13:00',
-    //   title: '회사2',
-    // },
     {
       end: new Date('2020-07-17'),
       id: 13412341234,
