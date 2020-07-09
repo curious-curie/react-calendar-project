@@ -1,58 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { createLabel } from '../modules/labels';
-
-const ColorContainer = styled.div`
-  background-color: ${(props) => props.color};
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin: 8px;
-  ${({ selected }) =>
-    selected &&
-    `
-    border: 2px solid gray;
-  `}
-`;
-
-const PaletteContainer = styled.div`
-  display: flex;
-  width: 300px;
-  padding: 16px;
-`;
-
-const TitleInput = styled.input`
-  border: 1px solid #ececec;
-  border-radius: 4px;
-  width: 220px;
-  padding: 8px;
-`;
-
-const LabelButton = styled.button`
-  padding: 8px;
-  border: 1px solid #ececec;
-  border-radius: 4px;
-`;
-
-const LabelWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SelectedLabelWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const ListWrapper = styled.div`
-  margin: 8px;
-  display: flex;
-  justify-content: center;
-`;
+import {
+  ColorContainer,
+  PaletteContainer,
+  TitleInput,
+  LabelButton,
+  LabelWrapper,
+  SelectedLabelWrapper,
+  ListWrapper,
+} from './label-styles';
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
   useEffect(() => {
@@ -116,6 +73,7 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
       <span>{label.title}</span>
     </LabelWrapper>
   ));
+
   return (
     <div>
       {readOnly ? (
