@@ -49,7 +49,7 @@ const CheckWrapper = styled.div`
 `;
 
 const BottomButton = styled.button`
-  background: gray;
+  background: #cbcbcb;
   font-size: 18px;
   font-weight: 5pp;
   color: white;
@@ -57,6 +57,7 @@ const BottomButton = styled.button`
   text-align: center;
   width: 80%;
   margin: 16px auto;
+  border-style: none;
   border-radius: 8px;
   display: flex;
   justify-content: center;
@@ -67,20 +68,24 @@ const Field = styled.span`
   padding: 8px;
 `;
 
-function ScheduleForm({ handleSubmit, presetData, readOnly }) {
+function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
   //TODO: 100개 제한 체크 / 반복일정
   const uniqueId = require('lodash.uniqueid');
-  const defaultDate = isAllDay ? format(new Date(), 'yyyy-MM-dd') : format(new Date(), "yyyy-MM-dd'T'HH:mm");
+
+  const formatDefaultDate = (date) => {
+    return isAllDay ? format(date, 'yyyy-MM-dd') : format(date, "yyyy-MM-dd'T'HH:mm");
+  };
 
   const [schedule, setSchedule] = useState(
     presetData
       ? { ...presetData }
       : {
+          allDay: false,
           title: '',
           memo: '',
-          startDate: defaultDate,
-          endDate: defaultDate,
-          label: null,
+          start: new Date(),
+          end: new Date(),
+          label: defaultLabel,
           id: +uniqueId(),
         }
   );
@@ -88,15 +93,17 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (presetData?.startDate.indexOf('T') === -1) setIsAllDay(true);
-    setSchedule({ ...presetData, label: presetData.label });
+    if (presetData) {
+      setIsAllDay(presetData.allDay ?? false);
+      setSchedule({ ...presetData, label: presetData.label });
+    }
   }, [presetData]);
 
   const isDateValid = useMemo(
     () =>
-      isBefore(new Date(schedule.startDate), new Date(schedule.endDate)) ||
-      isSameDay(new Date(schedule.startDate), new Date(schedule.endDate)),
-    [schedule.startDate, schedule.endDate]
+      isBefore(new Date(schedule.start), new Date(schedule.end)) ||
+      isSameDay(new Date(schedule.start), new Date(schedule.end)),
+    [schedule.start, schedule.end]
   );
 
   const bottomButtonTitle = presetData ? '수정' : '만들기';
@@ -106,12 +113,18 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
     setSchedule((schedule) => ({ ...schedule, [name]: value }));
   };
 
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setSchedule((schedule) => ({ ...schedule, [name]: new Date(value) }));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    if (schedule.title && schedule.endDate && schedule.startDate && isDateValid) {
+    if (schedule.title && schedule.end && schedule.start && isDateValid) {
       const id = presetData?.id ?? +uniqueId();
-      setSchedule({ ...schedule, id: id });
+      const { start, end } = schedule;
+      setSchedule({ ...schedule, start: new Date(start), end: new Date(end), id: id });
       handleSubmit(schedule);
     }
   };
@@ -120,12 +133,13 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
     setSchedule((schedule) => ({ ...schedule, label }));
   };
 
-  const toggleAllDay = () => {
-    setIsAllDay(!isAllDay);
+  const toggleAllDay = (e) => {
+    setIsAllDay(e);
+    setSchedule({ ...schedule, allDay: e });
   };
 
   const formatDate = (date) => {
-    return date.replace('T', ' ');
+    return format(date, 'yyyy-MM-dd HH:mm');
   };
 
   return (
@@ -153,29 +167,29 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
             <MemoInput type="text" name="memo" onChange={handleChange} value={schedule.memo} />
           )}
         </div>
-        <DateWrapper invalid={submitted && (!schedule.startDate || !isDateValid)}>
+        <DateWrapper invalid={submitted && (!schedule.start || !isDateValid)}>
           시작일
           {readOnly ? (
-            <DateField>{formatDate(presetData.startDate)}</DateField>
+            <DateField>{formatDate(presetData.start)}</DateField>
           ) : (
             <DateTimePicker
               isAllDay={isAllDay}
-              handleChange={handleChange}
-              name="startDate"
-              defaultDate={schedule.startDate}
+              handleChange={handleDateChange}
+              name="start"
+              defaultDate={formatDefaultDate(schedule.start)}
             />
           )}
         </DateWrapper>
-        <DateWrapper invalid={submitted && (!schedule.endDate || !isDateValid)}>
+        <DateWrapper invalid={submitted && (!schedule.end || !isDateValid)}>
           종료일
           {readOnly ? (
-            <DateField>{formatDate(presetData.endDate)}</DateField>
+            <DateField>{formatDate(presetData.end)}</DateField>
           ) : (
             <DateTimePicker
               isAllDay={isAllDay}
-              handleChange={handleChange}
-              name="endDate"
-              defaultDate={schedule.endDate}
+              handleChange={handleDateChange}
+              name="end"
+              defaultDate={formatDefaultDate(schedule.end)}
             />
           )}
         </DateWrapper>
