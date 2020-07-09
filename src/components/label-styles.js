@@ -47,3 +47,8 @@ export const ListWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const RightWrapper = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+`;

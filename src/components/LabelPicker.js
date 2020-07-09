@@ -9,11 +9,12 @@ import {
   LabelWrapper,
   SelectedLabelWrapper,
   ListWrapper,
+  RightWrapper,
 } from './label-styles';
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
   const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
-  const defaultColor = '#24bca8';
+  const defaultColor = '#62efd3';
   const dispatch = useDispatch();
   const { labels } = useSelector((state) => state.labels);
   let lastId = labels[labels.length - 1].id;
@@ -84,9 +85,11 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
       )}
 
       {!readOnly && (
-        <LabelButton type="button" onClick={() => setIsCreate(!isCreate)}>
-          레이블 추가
-        </LabelButton>
+        <RightWrapper>
+          <LabelButton type="button" onClick={() => setIsCreate(!isCreate)}>
+            레이블 추가
+          </LabelButton>
+        </RightWrapper>
       )}
       {!readOnly && isCreate && newLabelForm}
     </div>
