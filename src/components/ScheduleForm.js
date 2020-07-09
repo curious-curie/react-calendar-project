@@ -93,6 +93,8 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
     schedule.endDate,
   ]);
 
+  const bottomButtonTitle = presetData.id ? '수정' : '만들기';
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSchedule((schedule) => ({ ...schedule, [name]: value }));
@@ -115,6 +117,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
   const toggleAllDay = () => {
     setIsAllDay(!isAllDay);
   };
+
   return (
     <FormWrapper>
       <form name="form" onSubmit={onSubmit}>
@@ -176,7 +179,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
           레이블
           <LabelPicker readOnly={readOnly} handleSelect={handleSelectLabel} selected={schedule.label} />
         </div>
-        {!readOnly && <BottomButton>{presetData.id ? '수정' : '일정 만들기'}</BottomButton>}
+        {!readOnly && <BottomButton>{bottomButtonTitle}</BottomButton>}
       </form>
     </FormWrapper>
   );
