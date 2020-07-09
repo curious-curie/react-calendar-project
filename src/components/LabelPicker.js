@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { createLabel } from '../modules/schedules';
+import { createLabel } from '../modules/labels';
 
 const ColorContainer = styled.div`
   background-color: ${(props) => props.color};
@@ -61,7 +61,7 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
   const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
   const defaultColor = '#24bca8';
   const dispatch = useDispatch();
-  const labels = useSelector((state) => state.schedules.labels);
+  const { labels } = useSelector((state) => state.labels);
   let lastId = labels[labels.length - 1].id;
   const [newLabel, setNewLabel] = useState({
     title: '',
