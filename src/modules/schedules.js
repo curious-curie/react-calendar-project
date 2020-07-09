@@ -1,4 +1,5 @@
 import { createIntervalArray } from '@/utils/dateHelpers';
+
 const GET_SCHEDULES = 'GET_SCHEDULES';
 const CREATE_SCHEDULE = 'CREATE_SCHEDULE';
 const DELETE_SCHEDULE = 'DELETE_SCHEDULE';

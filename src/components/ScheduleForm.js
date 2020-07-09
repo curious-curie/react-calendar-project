@@ -146,7 +146,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
   return (
     <FormWrapper>
       <form name="form" onSubmit={onSubmit}>
-        <FieldWrapper readOnly={readOnly} title>
+        <FieldWrapper readOnly={readOnly} title="1">
           제목
           {readOnly ? (
             <Field>{presetData.title}</Field>

@@ -15,6 +15,11 @@ const EditButton = styled.button`
   border-radius: 8px;
 `;
 
+const ButtonWrapper = styled.div`
+  padding: 16px;
+  position: absolute;
+  right: 16px;
+`;
 function ScheduleDetailContainer({ match, history }) {
   const { id } = match.params;
 
@@ -44,10 +49,10 @@ function ScheduleDetailContainer({ match, history }) {
         <>
           <ScheduleForm presetData={schedule} readOnly={!isEditing} handleSubmit={handleEdit} />
           {!isEditing && (
-            <>
+            <ButtonWrapper>
               <EditButton onClick={() => setIsEditing(!isEditing)}>수정</EditButton>
               <EditButton onClick={() => handleDelete()}>삭제</EditButton>
-            </>
+            </ButtonWrapper>
           )}
         </>
       )}
