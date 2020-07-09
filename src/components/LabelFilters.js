@@ -7,7 +7,7 @@ import { ColorContainer, LabelWrapper, ListWrapper } from './label-styles';
 export default function LabelFilters() {
   const { labels, labelFilter } = useSelector((state) => state.labels);
   const dispatch = useDispatch();
-  const defaultColor = '#24bca8';
+  const defaultColor = '#62efd3';
 
   const isSelected = (label) => {
     return labelFilter.includes(label.id);
