@@ -15,14 +15,11 @@ const StyledTextField = styled(TextField)`
   width: 250;
 `;
 
-export default function DateAndTimePickers({
-  isAllDay,
-  invalid,
-  name,
-  handleChange,
-}) {
+export default function DateAndTimePickers({ isAllDay, invalid, name, handleChange, defaultDate }) {
   const inputType = isAllDay ? 'date' : 'datetime-local';
-  const defaultValue = isAllDay
+  const defaultValue = defaultDate
+    ? defaultDate
+    : isAllDay
     ? format(new Date(), 'yyyy-MM-dd')
     : format(new Date(), "yyyy-MM-dd'T'HH:mm");
 
@@ -31,7 +28,7 @@ export default function DateAndTimePickers({
       <StyledTextField
         id={inputType}
         type={inputType}
-        // defaultValue={defaultValue}
+        defaultValue={defaultValue}
         name={name}
         InputLabelProps={{
           shrink: true,
