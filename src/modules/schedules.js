@@ -35,28 +35,55 @@ export const deleteSchedule = (schedule) => {
 
 const initialState = {
   schedules: [
+    // {
+    //   end: '2020-07-17',
+    //   id: 1,
+    //   label: { id: 1, title: '기본' },
+    //   memo: '1234',
+    //   start: '2020-07-01',
+    //   title: '기본',
+    // },
+    // {
+    //   end: '2020-07-01',
+    //   id: 2,
+    //   label: { id: 2, title: '회사' },
+    //   memo: '회사일임',
+    //   start: '2020-06-11',
+    //   title: '회사일',
+    // },
+    // {
+    //   end: '2020-09-13T13:00',
+    //   id: 3,
+    //   label: { id: 2, title: '회사' },
+    //   memo: '회사일임',
+    //   start: '2020-07-01T13:00',
+    //   title: '회사2',
+    // },
     {
-      endDate: '2020-07-17',
-      id: 1,
+      end: new Date('2020-07-17'),
+      id: 13412341234,
       label: { id: 1, title: '기본' },
       memo: '1234',
-      startDate: '2020-07-01',
+      start: new Date('2020-07-01'),
+      allDay: true,
       title: '기본',
     },
     {
-      endDate: '2020-07-01',
-      id: 2,
-      label: { id: 2, title: '회사' },
+      end: new Date('2020-07-01'),
+      id: 223512531235,
+      label: { id: 2, title: '회사', color: 'skyblue' },
       memo: '회사일임',
-      startDate: '2020-06-11',
+      allDay: true,
+      start: new Date('2020-06-11'),
       title: '회사일',
     },
     {
-      endDate: '2020-09-13T13:00',
-      id: 3,
-      label: { id: 2, title: '회사' },
+      end: new Date('2020-09-13T13:00'),
+      id: 31461346134,
+      label: { id: 2, title: '회사', color: 'skyblue' },
       memo: '회사일임',
-      startDate: '2020-07-01T13:00',
+      start: new Date('2020-07-01T13:00'),
+      allDay: false,
       title: '회사2',
     },
   ],
@@ -71,7 +98,7 @@ export default function schedules(state = initialState, action) {
         schedules: action.payload,
       };
     case CREATE_SCHEDULE: {
-      const newDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
+      const newDate = createIntervalArray([action.payload.start, action.payload.end]);
       const count = { ...state.scheduleCount };
       newDate.forEach((date) => {
         count[date] ? count[date]++ : (count[date] = 1);
@@ -85,7 +112,7 @@ export default function schedules(state = initialState, action) {
       };
     }
     case DELETE_SCHEDULE: {
-      const newDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
+      const newDate = createIntervalArray([action.payload.start, action.payload.end]);
       const count = { ...state.scheduleCount };
       newDate.forEach((date) => count[date]--);
       const newSchedules = state.schedules.filter((schedule) => schedule.id !== action.payload.id);
@@ -101,8 +128,8 @@ export default function schedules(state = initialState, action) {
       const count = { ...state.scheduleCount };
       const newSchedules = state.schedules.map((schedule) => {
         if (+schedule.id === +action.payload.id) {
-          prevDate = createIntervalArray([schedule.startDate, schedule.endDate]);
-          nextDate = createIntervalArray([action.payload.startDate, action.payload.endDate]);
+          prevDate = createIntervalArray([schedule.start, schedule.end]);
+          nextDate = createIntervalArray([action.payload.start, action.payload.end]);
           schedule = { ...action.payload };
         }
         return schedule;

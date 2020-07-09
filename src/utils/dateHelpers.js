@@ -12,8 +12,8 @@ import {
 } from 'date-fns';
 
 export const hasMonth = (obj, currentDate) => {
-  const start = new Date(obj.startDate);
-  const end = new Date(obj.endDate);
+  const start = new Date(obj.start);
+  const end = new Date(obj.end);
   const prevLastDay = lastDayOfMonth(addMonths(currentDate, -1));
   const nextFirstDay = addDays(lastDayOfMonth(currentDate), 1);
   const isIncluded =
