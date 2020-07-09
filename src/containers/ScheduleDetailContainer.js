@@ -11,20 +11,21 @@ function ScheduleDetailContainer({ match, history }) {
 
   const [schedule, setSchedule] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const event = api.getEventByID(id);
     if (event?.id) setSchedule({ ...event });
   }, [id]);
 
-  const dispatch = useDispatch();
-
   const handleEdit = (schedule) => {
     dispatch(editSchedule(schedule));
     setIsEditing(false);
+    setSchedule(schedule);
   };
 
   const handleDelete = () => {
-    dispatch(deleteSchedule(id));
+    dispatch(deleteSchedule(schedule));
     history.push('/');
   };
 
