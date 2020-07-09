@@ -13,11 +13,12 @@ const FormInput = styled.input`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid gray;
-  ${({ invalid }) =>
-    invalid &&
-    `
-    border: 2px solid red;
-  `}
+  ${({ invalid }) => invalid && `border: 2px solid red`}
+`;
+
+const FieldWrapper = styled.div`
+  ${({ title }) => title && `font-weight: bold; font-size: 20px;`}
+  ${({ readOnly }) => readOnly && `margin: 16px 0`}
 `;
 
 const MemoInput = styled.input`
@@ -145,7 +146,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
   return (
     <FormWrapper>
       <form name="form" onSubmit={onSubmit}>
-        <div>
+        <FieldWrapper readOnly={readOnly} title>
           제목
           {readOnly ? (
             <Field>{presetData.title}</Field>
@@ -158,15 +159,15 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
               value={schedule.title}
             />
           )}
-        </div>
-        <div>
+        </FieldWrapper>
+        <FieldWrapper readOnly={readOnly}>
           메모
           {readOnly ? (
             <Field>{presetData.memo}</Field>
           ) : (
             <MemoInput type="text" name="memo" onChange={handleChange} value={schedule.memo} />
           )}
-        </div>
+        </FieldWrapper>
         <DateWrapper invalid={submitted && (!schedule.start || !isDateValid)}>
           시작일
           {readOnly ? (
@@ -199,10 +200,10 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
             <input type="checkbox" onChange={(e) => toggleAllDay(e.currentTarget.checked)} checked={isAllDay} />
           </CheckWrapper>
         )}
-        <div>
+        <FieldWrapper readOnly={readOnly}>
           레이블
           <LabelPicker readOnly={readOnly} handleSelect={handleSelectLabel} selected={schedule.label} />
-        </div>
+        </FieldWrapper>
         {!readOnly && <BottomButton>{bottomButtonTitle}</BottomButton>}
       </form>
     </FormWrapper>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
@@ -18,26 +18,25 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-let formats = {
-  dayFormat: (date, culture, localizer) => localizer.format(date, 'DDD', culture),
+const formats = {
   weekdayFormat: (date, culture, localizer) => localizer.format(date, 'eee', culture),
-  dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
-    localizer.format(start, { date: 'short' }, culture) + ' — ' + localizer.format(end, { date: 'short' }, culture),
 };
 
 function ScheduleCalendar({ history }) {
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
   const defaultColor = '#62efd3';
-  const onSelectEvent = (e) => {
-    history.push(`/${e.id}`);
-  };
+
   const eventStyle = (event) => {
     const style = {
       backgroundColor: event.label.color || defaultColor,
     };
     return { style };
   };
-  const { schedules } = useSelector((state) => state.schedules);
+
+  const onSelectEvent = (e) => {
+    history.push(`/${e.id}`);
+  };
+
   return (
     <div>
       Calendar <Link to="/new">new</Link>
