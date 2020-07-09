@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { isBefore } from 'date-fns';
+import { format, isSameDay, isBefore } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from './LabelPicker';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const FormWrapper = styled.div`
   padding: 20px;
 `;
+
 const FormInput = styled.input`
   margin: 8px;
   padding: 8px;
@@ -67,33 +68,37 @@ const Field = styled.span`
 `;
 
 function ScheduleForm({ handleSubmit, presetData, readOnly }) {
-  //TODO: 100개 제한 체크 / prefill info when editing / 반복일정
+  //TODO: 100개 제한 체크 / 반복일정
   const uniqueId = require('lodash.uniqueid');
+  const defaultDate = isAllDay ? format(new Date(), 'yyyy-MM-dd') : format(new Date(), "yyyy-MM-dd'T'HH:mm");
+
   const [schedule, setSchedule] = useState(
     presetData
       ? { ...presetData }
       : {
           title: '',
           memo: '',
-          startDate: '',
-          endDate: '',
+          startDate: defaultDate,
+          endDate: defaultDate,
           label: null,
-          id: uniqueId(),
+          id: +uniqueId(),
         }
   );
   const [isAllDay, setIsAllDay] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (presetData.startDate.indexOf('T') === -1) setIsAllDay(true);
+    if (presetData?.startDate.indexOf('T') === -1) setIsAllDay(true);
   }, [presetData]);
 
-  const isDateValid = useMemo(() => isBefore(new Date(schedule.startDate), new Date(schedule.endDate)), [
-    schedule.startDate,
-    schedule.endDate,
-  ]);
+  const isDateValid = useMemo(
+    () =>
+      isBefore(new Date(schedule.startDate), new Date(schedule.endDate)) ||
+      isSameDay(new Date(schedule.startDate), new Date(schedule.endDate)),
+    [schedule.startDate, schedule.endDate]
+  );
 
-  const bottomButtonTitle = presetData.id ? '수정' : '만들기';
+  const bottomButtonTitle = presetData ? '수정' : '만들기';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,7 +109,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
     e.preventDefault();
     setSubmitted(true);
     if (schedule.title && schedule.endDate && schedule.startDate && isDateValid) {
-      const id = uniqueId();
+      const id = presetData?.id ?? +uniqueId();
       setSchedule({ ...schedule, id: id });
       handleSubmit(schedule);
     }
