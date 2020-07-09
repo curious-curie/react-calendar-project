@@ -35,7 +35,7 @@ export const getEventsByMonth = (currentDate) => {
 
 export const getEventByID = (id) => {
   const { schedules } = store.getState().schedules;
-  return schedules.find((schedule) => +schedule.id === id);
+  return schedules.find((schedule) => +schedule.id === +id);
 };
 
 const hasMonth = (obj, currentDate) => {
