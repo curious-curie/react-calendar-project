@@ -89,6 +89,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
 
   useEffect(() => {
     if (presetData?.startDate.indexOf('T') === -1) setIsAllDay(true);
+    setSchedule({ ...presetData, label: presetData.label });
   }, [presetData]);
 
   const isDateValid = useMemo(
@@ -123,6 +124,10 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
     setIsAllDay(!isAllDay);
   };
 
+  const formatDate = (date) => {
+    return date.replace('T', ' ');
+  };
+
   return (
     <FormWrapper>
       <form name="form" onSubmit={onSubmit}>
@@ -151,7 +156,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
         <DateWrapper invalid={submitted && (!schedule.startDate || !isDateValid)}>
           시작일
           {readOnly ? (
-            <DateField>{presetData.startDate}</DateField>
+            <DateField>{formatDate(presetData.startDate)}</DateField>
           ) : (
             <DateTimePicker
               isAllDay={isAllDay}
@@ -164,7 +169,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly }) {
         <DateWrapper invalid={submitted && (!schedule.endDate || !isDateValid)}>
           종료일
           {readOnly ? (
-            <DateField>{presetData.endDate}</DateField>
+            <DateField>{formatDate(presetData.endDate)}</DateField>
           ) : (
             <DateTimePicker
               isAllDay={isAllDay}

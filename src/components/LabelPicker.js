@@ -12,14 +12,12 @@ import {
 } from './label-styles';
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
-  useEffect(() => {
-    handleSelect(labels[0]);
-  }, []);
   const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
   const defaultColor = '#24bca8';
   const dispatch = useDispatch();
   const { labels } = useSelector((state) => state.labels);
   let lastId = labels[labels.length - 1].id;
+
   const [newLabel, setNewLabel] = useState({
     title: '',
     color: null,
