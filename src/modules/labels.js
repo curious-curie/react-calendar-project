@@ -4,6 +4,26 @@ const APPLY_FILTER = 'APPLY_FILTER';
 const REMOVE_FILTER = 'REMOVE_FILTER';
 const RESET_FILTER = 'RESET_FILTER';
 
+export const applyFilter = (id) => {
+  return {
+    type: APPLY_FILTER,
+    payload: id,
+  };
+};
+
+export const removeFilter = (id) => {
+  return {
+    type: REMOVE_FILTER,
+    payload: id,
+  };
+};
+
+export const resetFilter = () => {
+  return {
+    type: RESET_FILTER,
+  };
+};
+
 export const getLabels = () => {
   // const labels = JSON.parse(localStorage.getItem('labels'));
   return {
@@ -53,7 +73,7 @@ export default function labels(state = initialState, action) {
         labelFilter: [...state.labelFilter, action.payload],
       };
     case REMOVE_FILTER:
-      const newFilters = labelFilter.filter((label) => label.id !== action.payload.id);
+      const newFilters = state.labelFilter.filter((label) => label !== action.payload);
       return {
         ...state,
         labelFilter: newFilters,
