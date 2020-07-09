@@ -26,6 +26,12 @@ export const createDateArray = ({ start, end }) => {
   return eachDayOfInterval({ start, end }).map((date) => format(date, 'yyyy-MM-dd'));
 };
 
+export const createIntervalArray = (dates) => {
+  const start = new Date(dates[0]);
+  const end = new Date(dates[1]);
+  return eachDayOfInterval({ start, end }).map((date) => format(date, 'yyyy-MM-dd'));
+};
+
 export const createMonthArray = (date) => {
   const start = startOfMonth(date);
   const end = endOfMonth(date);
