@@ -50,11 +50,25 @@ export const createLabel = (label) => {
 };
 
 const initialState = {
-  schedules: [],
+  schedules: [
+    {
+      endDate: '2020-07-17',
+      id: '1',
+      label: { id: 1, title: '기본' },
+      memo: '1234',
+      startDate: '2020-07-14',
+      title: 'test123',
+    },
+  ],
   labels: [
     {
       id: 1,
       title: '기본',
+    },
+    {
+      id: 2,
+      title: '회사',
+      color: '#c5ebfe',
     },
   ],
 };
@@ -75,9 +89,7 @@ export default function schedules(state = initialState, action) {
       };
     }
     case DELETE_SCHEDULE: {
-      const newSchedules = state.schedules.filter(
-        schedule.id !== action.payload
-      );
+      const newSchedules = state.schedules.filter((schedule) => schedule.id !== action.payload);
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
@@ -86,10 +98,10 @@ export default function schedules(state = initialState, action) {
     }
     case EDIT_SCHEDULE: {
       const newSchedules = state.schedules.map((schedule) => {
-        if (schedule.id === action.payload.id) {
+        if (+schedule.id === +action.payload.id) {
           schedule = { ...action.payload };
         }
-        return newSchedules;
+        return schedule;
       });
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
