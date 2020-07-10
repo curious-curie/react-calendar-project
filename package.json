@@ -15,6 +15,7 @@
   "repository": "https://oss.navercorp.com/selective-2020-internship/curie-yoo",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
     "date-fns": "^2.14.0",
