@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { format, isSameDay, isBefore } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
-import LabelPicker from './LabelPicker';
+import LabelPicker from '../Label/LabelPicker';
 import styled from 'styled-components';
 
 const FormWrapper = styled.div`

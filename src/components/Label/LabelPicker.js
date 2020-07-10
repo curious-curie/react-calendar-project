@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createLabel } from '../modules/labels';
+import { createLabel } from '@/modules/labels';
 import {
   ColorContainer,
   PaletteContainer,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import ScheduleForm from '@Components/ScheduleForm';
+import ScheduleForm from '@Components/Form/ScheduleForm';
 import { editSchedule, deleteSchedule } from '../modules/schedules';
 import * as api from '../apis';
 import styled from 'styled-components';

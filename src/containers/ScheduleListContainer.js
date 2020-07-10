@@ -5,8 +5,8 @@ import { addMonths } from 'date-fns';
 import { createMonthArray } from '@/utils/dateHelpers';
 import * as api from '@/apis';
 import { getFilteredSchedules } from '@/selectors';
-import LabelFilters from '../components/LabelFilters';
-import ScheduleList from '../components/ScheduleList';
+import LabelFilters from '@/components/Label/LabelFilters';
+import ScheduleList from '@/components/List/ScheduleList';
 
 export default function ScheduleListContainer() {
   const [currentSchedules, setCurrentSchedules] = useState([]);
