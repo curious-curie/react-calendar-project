@@ -39,7 +39,6 @@ function ScheduleCalendar({ history }) {
 
   return (
     <div>
-      Calendar <Link to="/new">new</Link>
       <LabelFilters />
       <Calendar
         defaultDate={new Date()}

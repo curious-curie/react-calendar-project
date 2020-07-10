@@ -25,9 +25,6 @@ const formats = {
 
 function ScheduleCalendar({ history }) {
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
-  useEffect(() => {
-    console.log(filteredSchedules);
-  }, [filteredSchedules]);
   const defaultColor = '#62efd3';
 
   const eventStyle = (event) => {
@@ -38,13 +35,11 @@ function ScheduleCalendar({ history }) {
   };
 
   const onSelectEvent = (e) => {
-    console.log(e);
-    // history.push(`/${e.id}`);
+    history.push(`/${e.id}`);
   };
 
   return (
     <div>
-      Calendar <Link to="/new">new</Link>
       <LabelFilters />
       <Calendar
         defaultDate={new Date()}
