@@ -1,6 +1,6 @@
 import { isBefore, isAfter, startOfMonth, lastDayOfMonth, eachDayOfInterval, format } from 'date-fns';
 import { hasMonth, createDateArray } from '@/utils/dateHelpers';
-import { store } from './index';
+import { store } from './store';
 
 // export const getEventsByMonth = (currentDate) => {
 //   const { schedules } = store.getState().schedules;
