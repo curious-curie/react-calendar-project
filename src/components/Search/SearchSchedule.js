@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import SearchResultItem from './SearchResultItem';
+import styled from 'styled-components';
 
+const SearchInput = styled.input`
+  padding: 8px;
+  margin: 8px;
+  width: 90%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+`;
 export default function SearchSchedule() {
   const [keyword, setKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -18,8 +27,10 @@ export default function SearchSchedule() {
 
   return (
     <div>
-      <input type="text" onChange={(e) => setKeyword(e.target.value.trim())} placeholder="검색어를 입력하세요" />
-      {searchResults.map((res) => res.title)}
+      <SearchInput type="text" onChange={(e) => setKeyword(e.target.value.trim())} placeholder="검색어를 입력하세요" />
+      {searchResults.map((res) => (
+        <SearchResultItem item={res} />
+      ))}
     </div>
   );
 }
