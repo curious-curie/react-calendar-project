@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addMonths, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+import { addMonths } from 'date-fns';
 import { createMonthArray } from '@/utils/dateHelpers';
 import * as api from '@/apis';
 import { getFilteredSchedules } from '@/selectors';
@@ -12,6 +12,7 @@ export default function ScheduleListContainer() {
   const [listDates, setListDates] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [dates, setDates] = useState([new Date()]);
+  const [target, setTarget] = useState(null);
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
 
   useEffect(() => {
@@ -24,10 +25,27 @@ export default function ScheduleListContainer() {
     setCurrentSchedules({ ...newList });
   }, [dates, filteredSchedules]);
 
-  const addMonth = () => {
+  //TODO: dates랑 분리해서 dates만 바꼈으면 append하는식으로 해보자ㅋ
+
+  const addMonth = useCallback(() => {
     const newDate = addMonths(currentDate, 1);
-    setCurrentDate(newDate);
+    setCurrentDate((currentDate) => addMonths(currentDate, 1));
     setDates([...dates, newDate]);
+  }, [currentDate, dates]);
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target]);
+
+  const onIntersect = ([entry]) => {
+    if (entry.isIntersecting) {
+      addMonth();
+    }
   };
 
   const scheduleList = useMemo(
@@ -44,7 +62,11 @@ export default function ScheduleListContainer() {
               ))}
             </ul>
           ) : (
-            'empty'
+            <ul>
+              <Link to={{ pathname: '/new', search: `?date=${date}` }}>
+                <li>새 일정 만들기</li>
+              </Link>
+            </ul>
           )}
         </div>
       )),
@@ -55,7 +77,7 @@ export default function ScheduleListContainer() {
     <div>
       <LabelFilters />
       {scheduleList}
-      <button onClick={addMonth}>+1</button>
+      <div ref={setTarget} />
     </div>
   );
 }
