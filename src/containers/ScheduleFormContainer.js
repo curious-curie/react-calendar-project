@@ -6,10 +6,12 @@ import ScheduleForm from '@Components/ScheduleForm';
 import { createSchedule } from '../modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
 
-function ScheduleFormContainer({ history }) {
+function ScheduleFormContainer({ history, location }) {
   const dispatch = useDispatch();
   const scheduleCount = useSelector((state) => state.schedules.scheduleCount);
+  const defaultDate = new URLSearchParams(location.search).get('date');
   const { labels } = useSelector((state) => state.labels);
+
   const handleSubmit = (schedule) => {
     const includedDates = createIntervalArray([schedule.start, schedule.end]);
     if (includedDates.some((date) => scheduleCount[date] >= 100)) {
@@ -19,9 +21,10 @@ function ScheduleFormContainer({ history }) {
     }
     history.push('/');
   };
+  
   return (
     <div>
-      <ScheduleForm handleSubmit={handleSubmit} defaultLabel={labels[0]} />
+      <ScheduleForm handleSubmit={handleSubmit} defaultLabel={labels[0]} defaultDate={defaultDate} />
     </div>
   );
 }

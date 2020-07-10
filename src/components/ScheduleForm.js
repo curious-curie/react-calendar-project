@@ -34,11 +34,7 @@ const DateWrapper = styled.div`
   align-items: center;
   padding: 8px 0;
   width: 100%;
-  ${({ invalid }) =>
-    invalid &&
-    `
-    color: red;
-  `}
+  ${({ invalid }) => invalid && `color: red;`}
 `;
 
 const DateField = styled.div`
@@ -69,8 +65,8 @@ const Field = styled.span`
   padding: 8px;
 `;
 
-function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
-  //TODO: 100개 제한 체크 / 반복일정
+function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaultDate }) {
+  //TODO: 반복일정
   const uniqueId = require('lodash.uniqueid');
 
   const formatDefaultDate = (date) => {
@@ -84,8 +80,8 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel }) {
           allDay: false,
           title: '',
           memo: '',
-          start: new Date(),
-          end: new Date(),
+          start: defaultDate ? new Date(defaultDate) : new Date(),
+          end: defaultDate ? new Date(defaultDate) : new Date(),
           label: defaultLabel,
           id: +uniqueId(),
         }
