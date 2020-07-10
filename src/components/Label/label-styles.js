@@ -1,5 +1,19 @@
 import styled from 'styled-components';
 
+export const DeleteButton = styled.button`
+  background: gray;
+  opacity: 0.7;
+  right: 2px;
+  font-size: 5px;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  padding: 4px 5px;
+  position: absolute;
+  top: 0;
+`;
+
 export const ColorContainer = styled.div`
   background-color: ${(props) => props.color};
   width: 30px;
@@ -30,6 +44,7 @@ export const LabelButton = styled.button`
 `;
 
 export const LabelWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
