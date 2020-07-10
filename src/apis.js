@@ -25,23 +25,22 @@ import { store } from './index';
 // };
 // temporary commented out since not used
 
-// export const getSchedulesByMonth = (currentDate, schedules) => {
-//   let newSchedules = [];
-//   schedules.forEach((schedule) => {
-//     if (hasMonth(schedule, currentDate)) {
-//       const start = isBefore(schedule.start, startOfMonth(currentDate)) ? startOfMonth(currentDate) : schedule.start;
-//       const end = isAfter(schedule.end, lastDayOfMonth(currentDate)) ? lastDayOfMonth(currentDate) : schedule.end;
-//       if (isBefore(end, start)) return [];
-//       const dateArray = createDateArray({ start, end });
-//       dateArray.forEach((date) => {
-//         const items = newSchedules[date];
-//         newSchedules[date] = items ? [...items, schedule] : [schedule];
-//       });
-//     }
-//   });
-//   return newSchedules;
-// };
-//temporary for test
+export const getSchedulesByMonth = (currentDate, schedules) => {
+  let newSchedules = [];
+  schedules.forEach((schedule) => {
+    if (hasMonth(schedule, currentDate)) {
+      const start = isBefore(schedule.start, startOfMonth(currentDate)) ? startOfMonth(currentDate) : schedule.start;
+      const end = isAfter(schedule.end, lastDayOfMonth(currentDate)) ? lastDayOfMonth(currentDate) : schedule.end;
+      if (isBefore(end, start)) return [];
+      const dateArray = createDateArray({ start, end });
+      dateArray.forEach((date) => {
+        const items = newSchedules[date];
+        newSchedules[date] = items ? [...items, schedule] : [schedule];
+      });
+    }
+  });
+  return newSchedules;
+};
 
 export const getSchedules = (dates, schedules) => {
   let newSchedules = [];

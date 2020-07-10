@@ -23,9 +23,14 @@ export default function ScheduleListContainer() {
   useEffect(() => {
     const newList = api.getSchedules(dates, filteredSchedules);
     setCurrentSchedules({ ...newList });
-  }, [dates, filteredSchedules]);
+  }, [filteredSchedules]);
+  // filter가 바뀐 경우 바뀐 스케쥴에 대해 배열 형태 변형하여 다시 set
 
-  //TODO: dates랑 분리해서 dates만 바꼈으면 append하는식으로 해보자ㅋ
+  useEffect(() => {
+    const addedList = api.getSchedulesByMonth(currentDate, filteredSchedules);
+    setCurrentSchedules((currentSchedules) => ({ ...currentSchedules, ...addedList }));
+  }, [dates]);
+  // date만 추가되는 경우 추가된 날짜의 스케쥴들만 가져와서 APPEND
 
   const addMonth = useCallback(() => {
     const newDate = addMonths(currentDate, 1);
