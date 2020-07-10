@@ -26,6 +26,7 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
     title: '',
     color: null,
     id: lastId + 1,
+    visible: true,
   });
   const [isCreate, setIsCreate] = useState(false);
 
