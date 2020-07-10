@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import ScheduleFormContainer from './containers/ScheduleFormContainer';
 import ScheduleListContainer from './containers/ScheduleListContainer';
@@ -20,12 +20,14 @@ function App() {
     <div>
       <GlobalStyle />
       <Header />
-      <Route path="/" component={ScheduleCalendar} exact={true} />
-      <Route path="/list" component={ScheduleListContainer} />
-      <Route path="/new" component={ScheduleFormContainer} />
-      <Route path="/:id" component={ScheduleDetailContainer} exact={true} />
-      <Route path="/search" component={SearchSchedule} exact={true} />
-      <Route path="/calist" component={ListUsingCal} exact={true} />
+      <Switch>
+        <Route path="/" component={ScheduleCalendar} exact={true} />
+        <Route path="/list" component={ScheduleListContainer} />
+        <Route path="/new" component={ScheduleFormContainer} exact={true} />
+        <Route path="/search" component={SearchSchedule} exact={true} />
+        <Route path="/calist" component={ListUsingCal} exact={true} />
+        <Route path="/:id" component={ScheduleDetailContainer} exact={true} />
+      </Switch>
     </div>
   );
 }

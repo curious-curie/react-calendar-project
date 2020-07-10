@@ -65,6 +65,12 @@ const Field = styled.span`
   padding: 8px;
 `;
 
+const FormTitle = styled.div`
+  margin: 16px 0;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
 function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaultDate }) {
   //TODO: 반복일정
   const uniqueId = require('lodash.uniqueid');
@@ -141,6 +147,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
 
   return (
     <FormWrapper>
+      {!readOnly && <FormTitle>일정 {bottomButtonTitle}</FormTitle>}
       <form name="form" onSubmit={onSubmit}>
         <FieldWrapper readOnly={readOnly} title="1">
           제목
