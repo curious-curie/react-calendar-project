@@ -29,7 +29,7 @@ export default function SearchSchedule() {
     <div>
       <SearchInput type="text" onChange={(e) => setKeyword(e.target.value.trim())} placeholder="검색어를 입력하세요" />
       {searchResults.map((res) => (
-        <SearchResultItem item={res} />
+        <SearchResultItem key={res.id} item={res} />
       ))}
     </div>
   );
