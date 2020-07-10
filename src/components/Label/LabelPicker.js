@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createLabel } from '@/modules/labels';
+import { createLabel, deleteLabel } from '@/modules/labels';
+
 import {
   ColorContainer,
   PaletteContainer,
@@ -10,6 +11,7 @@ import {
   SelectedLabelWrapper,
   ListWrapper,
   RightWrapper,
+  DeleteButton,
 } from './label-styles';
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
@@ -17,6 +19,7 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
   const defaultColor = '#62efd3';
   const dispatch = useDispatch();
   const { labels } = useSelector((state) => state.labels);
+  const validLabels = labels.filter((label) => label.visible);
   let lastId = labels[labels.length - 1].id;
 
   const [newLabel, setNewLabel] = useState({
@@ -46,6 +49,10 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
     }
   };
 
+  const handleDelete = (label) => {
+    dispatch(deleteLabel(label));
+  };
+
   const palette = (
     <PaletteContainer>
       {colorList.map((color) => (
@@ -66,8 +73,9 @@ export default function LabelPicker({ readOnly, handleSelect, selected }) {
     </div>
   );
 
-  const labelList = labels.map((label) => (
+  const labelList = validLabels.map((label) => (
     <LabelWrapper key={label.id} onClick={() => handleSelect(label)}>
+      {label.id !== 1 && <DeleteButton onClick={() => handleDelete(label)}>X</DeleteButton>}
       <ColorContainer selected={selected && selected.id === label.id} color={label.color ?? defaultColor} />
       <span>{label.title}</span>
     </LabelWrapper>

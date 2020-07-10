@@ -6,6 +6,8 @@ import { ColorContainer, LabelWrapper, ListWrapper } from './label-styles';
 
 export default function LabelFilters() {
   const { labels, labelFilter } = useSelector((state) => state.labels);
+  const validLabels = labels.filter((label) => label.visible);
+
   const dispatch = useDispatch();
   const defaultColor = '#62efd3';
 
@@ -34,7 +36,7 @@ export default function LabelFilters() {
     </LabelWrapper>
   );
 
-  const labelList = labels.map((label) => (
+  const labelList = validLabels.map((label) => (
     <LabelWrapper key={label.id} onClick={() => handleSelect(label)}>
       <ColorContainer selected={isSelected(label)} color={label.color ?? defaultColor} />
       <span>{label.title}</span>
