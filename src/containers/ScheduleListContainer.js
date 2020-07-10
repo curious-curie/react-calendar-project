@@ -6,6 +6,7 @@ import { createMonthArray } from '@/utils/dateHelpers';
 import * as api from '@/apis';
 import { getFilteredSchedules } from '@/selectors';
 import LabelFilters from '../components/LabelFilters';
+import ScheduleList from '../components/ScheduleList';
 
 export default function ScheduleListContainer() {
   const [currentSchedules, setCurrentSchedules] = useState([]);
@@ -53,35 +54,10 @@ export default function ScheduleListContainer() {
     }
   };
 
-  const scheduleList = useMemo(
-    () =>
-      listDates.map((date) => (
-        <div key={date}>
-          {date}
-          {currentSchedules[date] ? (
-            <ul>
-              {currentSchedules[date].map((schedule) => (
-                <Link key={schedule.id} to={`/${schedule.id}`}>
-                  <li>{schedule.title}</li>
-                </Link>
-              ))}
-            </ul>
-          ) : (
-            <ul>
-              <Link to={{ pathname: '/new', search: `?date=${date}` }}>
-                <li>새 일정 만들기</li>
-              </Link>
-            </ul>
-          )}
-        </div>
-      )),
-    [currentSchedules, filteredSchedules, listDates]
-  );
-
   return (
     <div>
       <LabelFilters />
-      {scheduleList}
+      <ScheduleList dates={listDates} schedules={currentSchedules} />
       <div ref={setTarget} />
     </div>
   );
