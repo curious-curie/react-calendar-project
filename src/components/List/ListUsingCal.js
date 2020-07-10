@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
-import './cal.css';
+import '../Calendar/cal.css';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { getFilteredSchedules } from '@/selectors';
-import LabelFilters from './LabelFilters';
+import LabelFilters from '../Label/LabelFilters';
 
 const locales = {
   'en-US': require('date-fns/locale/en-US'),

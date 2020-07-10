@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import ScheduleForm from '@Components/ScheduleForm';
+import ScheduleForm from '@/components/Form/ScheduleForm';
 import { createSchedule } from '../modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
 
@@ -21,7 +21,7 @@ function ScheduleFormContainer({ history, location }) {
     }
     history.push('/');
   };
-  
+
   return (
     <div>
       <ScheduleForm handleSubmit={handleSubmit} defaultLabel={labels[0]} defaultDate={defaultDate} />
