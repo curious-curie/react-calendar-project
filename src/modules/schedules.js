@@ -1,9 +1,15 @@
 import { createIntervalArray } from '@/utils/dateHelpers';
+import { endOfYear, addYears } from 'date-fns';
+import RRule from 'rrule';
 
 const GET_SCHEDULES = 'GET_SCHEDULES';
 const CREATE_SCHEDULE = 'CREATE_SCHEDULE';
 const DELETE_SCHEDULE = 'DELETE_SCHEDULE';
 const EDIT_SCHEDULE = 'EDIT_SCHEDULE';
+const UPDATE_REPEAT_END = 'UPDATE_REPEAT_END';
+const CREATE_REPEATED_SCHEDULES = 'CREATE_REPEATED_SCHEDULES';
+const EDIT_REPEATED_SCHEDULES = 'EDIT_REPEATED_SCHEDULES';
+const DELETE_REPEATED_SCHEDULES = 'DELETE_REPEATED_SCHEDULES';
 
 export const getSchedules = () => {
   // const schedules = JSON.parse(localStorage.getItem('schedules'));
@@ -34,37 +40,38 @@ export const deleteSchedule = (schedule) => {
   };
 };
 
+export const updateRepeatEnd = () => {
+  return {
+    type: UPDATE_REPEAT_END,
+  };
+};
+
+export const createRepeatedSchedules = (schedule) => {
+  return {
+    type: CREATE_REPEATED_SCHEDULES,
+    payload: schedule,
+  };
+};
+
+export const editRepeatedSchedules = (schedule) => {
+  return {
+    type: EDIT_REPEATED_SCHEDULES,
+    payload: schedule,
+  };
+};
+
+export const deleteRepeatedSchedules = (schedule) => {
+  return {
+    type: DELETE_REPEATED_SCHEDULES,
+    payload: schedule,
+  };
+};
+
 const initialState = {
-  schedules: [
-    {
-      end: new Date('2020-07-17'),
-      id: 13412341234,
-      label: { id: 1, title: '기본' },
-      memo: '1234',
-      start: new Date('2020-07-01'),
-      allDay: true,
-      title: '기본',
-    },
-    {
-      end: new Date('2020-07-01'),
-      id: 223512531235,
-      label: { id: 2, title: '회사', color: 'skyblue' },
-      memo: '회사일임',
-      allDay: true,
-      start: new Date('2020-06-11'),
-      title: '회사일',
-    },
-    {
-      end: new Date('2020-09-13T13:00'),
-      id: 31461346134,
-      label: { id: 2, title: '회사', color: 'skyblue' },
-      memo: '회사일임',
-      start: new Date('2020-07-01T13:00'),
-      allDay: false,
-      title: '회사2',
-    },
-  ],
+  schedules: [],
   scheduleCount: [],
+  repeatedSchedules: {},
+  repeatEnd: endOfYear(new Date()),
 };
 
 export default function schedules(state = initialState, action) {
@@ -90,9 +97,10 @@ export default function schedules(state = initialState, action) {
     }
     case DELETE_SCHEDULE: {
       const newDate = createIntervalArray([action.payload.start, action.payload.end]);
+      const id = action.payload.id.toString().split('-')[0];
       const count = { ...state.scheduleCount };
       newDate.forEach((date) => count[date]--);
-      const newSchedules = state.schedules.filter((schedule) => schedule.id !== action.payload.id);
+      const newSchedules = state.schedules.filter((schedule) => +schedule.id !== +id);
       // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
@@ -103,8 +111,9 @@ export default function schedules(state = initialState, action) {
     case EDIT_SCHEDULE: {
       let prevDate, nextDate;
       const count = { ...state.scheduleCount };
+      const id = action.payload.id.toString().split('-')[0];
       const newSchedules = state.schedules.map((schedule) => {
-        if (+schedule.id === +action.payload.id) {
+        if (+schedule.id === +id) {
           prevDate = createIntervalArray([schedule.start, schedule.end]);
           nextDate = createIntervalArray([action.payload.start, action.payload.end]);
           schedule = { ...action.payload };
@@ -122,7 +131,96 @@ export default function schedules(state = initialState, action) {
         scheduleCount: count,
       };
     }
+    case UPDATE_REPEAT_END: {
+      const newSchedules = { ...state.repeatedSchedules };
+      const newRepeatEnd = addYears(state.repeatEnd, 1);
+      Object.entries(newSchedules).forEach(([id, v]) => {
+        const lastItem = v[v.length - 1];
+        const createdSchedules = getRepeatedSchedules(lastItem, newRepeatEnd);
+        if (state.repeatedSchedules[id]) {
+          newSchedules[id] = [...state.repeatedSchedules[id], ...createdSchedules];
+        }
+      });
+      // update repeated schedules
+      return {
+        ...state,
+        repeatEnd: newRepeatEnd,
+        repeatedSchedules: newSchedules,
+      };
+    }
+    case CREATE_REPEATED_SCHEDULES: {
+      const schedule = action.payload;
+      const { id, repeatRule, start, end } = schedule;
+      const createdSchedules = getRepeatedSchedules(schedule, state.repeatEnd);
+      const newSchedules = { ...state.repeatedSchedules };
+      if (state.repeatedSchedules[id]) {
+        newSchedules[id] = [...state.repeatedSchedules[id], ...createdSchedules];
+      } else {
+        newSchedules[id] = createdSchedules;
+      }
+      return {
+        ...state,
+        repeatedSchedules: newSchedules,
+      };
+    }
+    case EDIT_REPEATED_SCHEDULES: {
+      const schedule = action.payload;
+      const id = schedule.id.toString().split('-')[0];
+      // const newSchedules = state.repeatedSchedules[schedule.id].map((item) => {
+      //   return { ...action.payload, id: item.id, start: item.start, end: item.end };
+      // });
+      const newSchedules = getRepeatedSchedules(schedule, state.repeatEnd);
+      const newRepeatedSchedules = { ...state.repeatedSchedules };
+      newRepeatedSchedules[id] = newSchedules;
+      return {
+        ...state,
+        repeatedSchedules: newRepeatedSchedules,
+      };
+    }
+    case DELETE_REPEATED_SCHEDULES: {
+      const id = action.payload.id.toString().split('-')[0];
+      const newRepeatedSchedules = { ...state.repeatedSchedules };
+      delete newRepeatedSchedules[id];
+      return {
+        ...state,
+        repeatedSchedules: newRepeatedSchedules,
+      };
+    }
     default:
       return state;
   }
 }
+
+const getRepeatedSchedules = (schedule, until) => {
+  const { id, repeatRule, start, end } = schedule;
+  const offset = id.toString().split('-')[1] ? +id.toString().split('-')[1] : 0;
+  const scheduleId = id.toString().split('-')[0];
+
+  const freq = repeatRule === 'WK' || repeatRule === 'WKD' ? RRule.WEEKLY : repeatRule;
+  const byweekday =
+    repeatRule === 'WK'
+      ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
+      : repeatRule === 'WKD'
+      ? [RRule.SA, RRule.SU]
+      : null;
+  console.log(repeatRule);
+
+  const startRule = new RRule({
+    freq,
+    dtstart: new Date(start),
+    until: until,
+    byweekday,
+  });
+  const startArrays = startRule.all();
+  const endRule = new RRule({
+    freq,
+    dtstart: new Date(end),
+    count: startArrays.length,
+    byweekday,
+  });
+  const endArrays = endRule.all();
+  const createdSchedules = startArrays.map((date, index) => {
+    return { ...schedule, start: date, end: endArrays[index], id: `${scheduleId}-${index + offset}` };
+  });
+  return createdSchedules.slice(1);
+};
