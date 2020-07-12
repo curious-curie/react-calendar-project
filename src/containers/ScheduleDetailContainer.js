@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/Form/ScheduleForm';
 import { editSchedule, deleteSchedule, editRepeatedSchedules, deleteRepeatedSchedules } from '../modules/schedules';
-import * as api from '../apis';
 import { getSchedule } from '@/selectors';
 import styled from 'styled-components';
 
@@ -25,7 +24,7 @@ function ScheduleDetailContainer({ match, history }) {
   const { id } = match.params;
 
   const [isEditing, setIsEditing] = useState(false);
-  const schedule = useSelector((state) => getSchedule(state, id));
+  const schedule = useSelector((state) => getScheduleById(state, id));
 
   const dispatch = useDispatch();
 
