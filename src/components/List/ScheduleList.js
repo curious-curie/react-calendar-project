@@ -21,6 +21,8 @@ const EmptyWrapper = styled.div`
 `;
 
 export default function ScheduleList({ dates, schedules }) {
+  const getId = (item) => item?.id.toString().split('-')[0];
+
   return (
     <div>
       {dates.map((date) => (
@@ -30,7 +32,7 @@ export default function ScheduleList({ dates, schedules }) {
             {schedules[date] ? (
               <div>
                 {schedules[date].map((schedule) => (
-                  <Link key={schedule.id} to={`/${schedule.id}`}>
+                  <Link key={schedule.id} to={`/${getId(schedule)}`}>
                     <ScheduleListItem date={date} schedule={schedule} />
                   </Link>
                 ))}

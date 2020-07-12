@@ -233,7 +233,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
           </CheckWrapper>
         )}
         <CheckWrapper>
-          {!readOnly && !presetData?.id && (
+          {!readOnly && (
             <>
               <input type="checkbox" onChange={(e) => toggleRepeated(e.currentTarget.checked)} checked={repeated} />
               <RepeatLabel>반복</RepeatLabel>
