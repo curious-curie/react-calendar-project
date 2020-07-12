@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/Form/ScheduleForm';
-import { editSchedule, deleteSchedule } from '../modules/schedules';
+import { editSchedule, deleteSchedule, getSchedules } from '../modules/schedules';
 import * as api from '../apis';
+import { getSchedule } from '@/selectors';
 import styled from 'styled-components';
 
 const EditButton = styled.button`
@@ -23,14 +24,10 @@ const ButtonWrapper = styled.div`
 function ScheduleDetailContainer({ match, history }) {
   const { id } = match.params;
 
-  const [schedule, setSchedule] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useDispatch();
+  const schedule = useSelector((state) => getSchedule(state, id));
 
-  useEffect(() => {
-    const event = api.getEventByID(id);
-    if (event?.id) setSchedule({ ...event });
-  }, [id]);
+  const dispatch = useDispatch();
 
   const handleEdit = (schedule) => {
     dispatch(editSchedule(schedule));
