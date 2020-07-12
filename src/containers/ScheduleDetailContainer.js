@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/Form/ScheduleForm';
 import { editSchedule, deleteSchedule, editRepeatedSchedules, deleteRepeatedSchedules } from '../modules/schedules';
-import { getSchedule } from '@/selectors';
+import { getScheduleById } from '@/selectors';
 import styled from 'styled-components';
 
 const EditButton = styled.button`
