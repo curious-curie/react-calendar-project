@@ -3,6 +3,9 @@ import { format, isSameDay, isBefore } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from '../Label/LabelPicker';
 import styled from 'styled-components';
+import RRule from 'rrule';
+import Select from '@material-ui/core/Select';
+import { MenuItem } from '@material-ui/core';
 
 const FormWrapper = styled.div`
   padding: 20px;
@@ -71,10 +74,22 @@ const FormTitle = styled.div`
   font-weight: bold;
 `;
 
+const RepeatLabel = styled.span`
+  margin-right: 16px;
+`;
+
 function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaultDate }) {
   //TODO: 반복일정
   const uniqueId = require('lodash.uniqueid');
 
+  const repeatFields = [
+    { name: '매일', value: RRule.DAILY },
+    { name: '매주', value: RRule.WEEKLY },
+    { name: '매달', value: RRule.MONTHLY },
+    { name: '매년', value: RRule.YEARLY },
+    { name: '매 주중마다', value: 'WK' },
+    { name: '매 주말마다', value: 'WKD' },
+  ];
   const formatDefaultDate = (date) => {
     return isAllDay ? format(date, 'yyyy-MM-dd') : format(date, "yyyy-MM-dd'T'HH:mm");
   };
@@ -90,9 +105,13 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
           end: defaultDate ? new Date(defaultDate) : new Date(),
           label: defaultLabel,
           id: +uniqueId(),
+          repeated: false,
+          repeatRule: RRule.DAILY,
         }
   );
   const [isAllDay, setIsAllDay] = useState(false);
+  const [repeated, setRepeated] = useState(false);
+  const [repeatRule, setRepeatRule] = useState(RRule.DAILY);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -114,6 +133,11 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSchedule((schedule) => ({ ...schedule, [name]: value }));
+  };
+
+  const handleRepeatChange = (e) => {
+    setRepeatRule(e.target.value);
+    setSchedule((schedule) => ({ ...schedule, repeatRule: e.target.value }));
   };
 
   const handleDateChange = (e) => {
@@ -139,6 +163,11 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
   const toggleAllDay = (e) => {
     setIsAllDay(e);
     setSchedule({ ...schedule, allDay: e });
+  };
+
+  const toggleRepeated = (e) => {
+    setRepeated(e);
+    setSchedule({ ...schedule, repeated: e });
   };
 
   const formatDate = (date) => {
@@ -199,9 +228,40 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
         </DateWrapper>
         {!readOnly && (
           <CheckWrapper>
-            하루 종일
             <input type="checkbox" onChange={(e) => toggleAllDay(e.currentTarget.checked)} checked={isAllDay} />
+            하루 종일
           </CheckWrapper>
+        )}
+        <CheckWrapper>
+          {!readOnly && !presetData?.id && (
+            <>
+              <input type="checkbox" onChange={(e) => toggleRepeated(e.currentTarget.checked)} checked={repeated} />
+              <RepeatLabel>반복</RepeatLabel>
+            </>
+          )}
+          {!readOnly && repeated && (
+            <Select
+              labelId="demo-controlled-open-select-label"
+              id="demo-controlled-open-select"
+              value={repeatRule}
+              onChange={handleRepeatChange}
+            >
+              <MenuItem value="" disabled>
+                반복
+              </MenuItem>
+              {repeatFields.map((field) => (
+                <MenuItem key={field.value} value={field.value}>
+                  {field.name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        </CheckWrapper>
+        {readOnly && schedule.repeated && (
+          <FieldWrapper readOnly={readOnly}>
+            반복
+            <Field>{repeatFields.find((item) => item.value === schedule.repeatRule).name}</Field>
+          </FieldWrapper>
         )}
         <FieldWrapper readOnly={readOnly}>
           레이블
