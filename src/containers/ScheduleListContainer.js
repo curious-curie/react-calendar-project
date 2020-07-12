@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addMonths } from 'date-fns';
+import { addMonths, isAfter } from 'date-fns';
 import { createMonthArray } from '@/utils/dateHelpers';
 import * as api from '@/apis';
 import { getFilteredSchedules } from '@/selectors';
 import LabelFilters from '@/components/Label/LabelFilters';
 import ScheduleList from '@/components/List/ScheduleList';
+import { updateRepeatEnd } from '@/modules/schedules';
 
 export default function ScheduleListContainer() {
   const [currentSchedules, setCurrentSchedules] = useState([]);
@@ -15,10 +16,15 @@ export default function ScheduleListContainer() {
   const [dates, setDates] = useState([new Date()]);
   const [target, setTarget] = useState(null);
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
+  const { repeatEnd } = useSelector((state) => state.schedules);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const daysOfMonth = createMonthArray(currentDate);
     setListDates([...listDates, ...daysOfMonth]);
+    if (isAfter(addMonths(currentDate, 1), repeatEnd)) {
+      dispatch(updateRepeatEnd());
+    }
   }, [currentDate]);
 
   useEffect(() => {
