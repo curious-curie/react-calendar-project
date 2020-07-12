@@ -11,11 +11,12 @@ const ItemWrapper = styled.div`
 `;
 
 const ItemTime = styled.div`
-  ${'' /* text-align: center; */}
   margin-left: 8px;
   padding: 0 8px;
-  width: 70px;
+  font-size: 12px;
+  width: 90px;
   color: #bbb;
+  align-self: flex-end;
 `;
 
 const ItemLabel = styled.div`

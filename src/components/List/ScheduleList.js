@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ScheduleListItem from './ScheduleListItem';
@@ -14,39 +14,52 @@ const Item = styled.div`
 
 const EmptyWrapper = styled.div`
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
   border-bottom: 1px solid #ececec;
   padding: 0 20px 8px;
   color: #ccc;
 `;
 
+const CheckWrapper = styled.div`
+  margin: 16px 0;
+`;
+
 export default function ScheduleList({ dates, schedules }) {
   const getId = (item) => item?.id.toString().split('-')[0];
-
+  const [showAll, setShowAll] = useState(true);
   return (
     <div>
-      {dates.map((date) => (
-        <DateWrapper key={date}>
-          <div>{date}</div>
-          <Item>
-            {schedules[date] ? (
-              <div>
-                {schedules[date].map((schedule) => (
-                  <Link key={schedule.id} to={`/${getId(schedule)}`}>
-                    <ScheduleListItem date={date} schedule={schedule} />
+      <CheckWrapper>
+        <input type="checkbox" onChange={(e) => setShowAll(!e.currentTarget.checked)} checked={!showAll} />
+        일정 있는 날짜만 보기
+      </CheckWrapper>
+      {dates.map((date) =>
+        showAll || schedules[date] ? (
+          <DateWrapper key={date}>
+            <div>{date}</div>
+            <Item>
+              {schedules[date] ? (
+                <div>
+                  {schedules[date].map((schedule) => (
+                    <Link key={schedule.id} to={`/${getId(schedule)}`}>
+                      <ScheduleListItem date={date} schedule={schedule} />
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  <Link to={{ pathname: '/new', search: `?date=${date}` }}>
+                    <EmptyWrapper>새 일정 만들기</EmptyWrapper>
                   </Link>
-                ))}
-              </div>
-            ) : (
-              <div>
-                <Link to={{ pathname: '/new', search: `?date=${date}` }}>
-                  <EmptyWrapper>새 일정 만들기</EmptyWrapper>
-                </Link>
-              </div>
-            )}
-          </Item>
-        </DateWrapper>
-      ))}
+                </div>
+              )}
+            </Item>
+          </DateWrapper>
+        ) : (
+          <></>
+        )
+      )}
     </div>
   );
 }
