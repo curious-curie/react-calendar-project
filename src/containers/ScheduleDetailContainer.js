@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/Form/ScheduleForm';
-import { editSchedule, deleteSchedule, getSchedules } from '../modules/schedules';
+import { editSchedule, deleteSchedule, editRepeatedSchedules, deleteRepeatedSchedules } from '../modules/schedules';
 import * as api from '../apis';
 import { getSchedule } from '@/selectors';
 import styled from 'styled-components';
@@ -31,18 +31,19 @@ function ScheduleDetailContainer({ match, history }) {
 
   const handleEdit = (schedule) => {
     dispatch(editSchedule(schedule));
+    if (schedule.repeated) dispatch(editRepeatedSchedules(schedule));
     setIsEditing(false);
-    setSchedule(schedule);
   };
 
   const handleDelete = () => {
     dispatch(deleteSchedule(schedule));
+    if (schedule.repeated) dispatch(deleteRepeatedSchedules(schedule));
     history.push('/');
   };
 
   return (
     <div>
-      {schedule.id && (
+      {schedule?.id && (
         <>
           <ScheduleForm presetData={schedule} readOnly={!isEditing} handleSubmit={handleEdit} />
           {!isEditing && (

@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ScheduleForm from '@/components/Form/ScheduleForm';
-import { createSchedule } from '../modules/schedules';
+import {
+  createSchedule,
+  createRepeatedSchedules,
+  editRepeatedSchedules,
+  deleteRepeatedSchedules,
+} from '../modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
+import RRule from 'rrule';
 
 function ScheduleFormContainer({ history, location }) {
   const dispatch = useDispatch();
@@ -18,6 +24,9 @@ function ScheduleFormContainer({ history, location }) {
       alert('100개 이상 일정을 생성할 수 없습니다!');
     } else {
       dispatch(createSchedule(schedule));
+    }
+    if (schedule.repeated) {
+      dispatch(createRepeatedSchedules(schedule));
     }
     history.push('/');
   };
