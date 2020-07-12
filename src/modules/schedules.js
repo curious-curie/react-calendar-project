@@ -203,7 +203,6 @@ const getRepeatedSchedules = (schedule, until) => {
       : repeatRule === 'WKD'
       ? [RRule.SA, RRule.SU]
       : null;
-  console.log(repeatRule);
 
   const startRule = new RRule({
     freq,
