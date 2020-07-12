@@ -20,7 +20,7 @@ export const getFilteredSchedules = createSelector([getLabelFilter, getMergedSch
   return merged.filter((schedule) => labelFilter.includes(schedule.label.id));
 });
 
-export const getSchedule = (state, id) => {
+export const getScheduleById = (state, id) => {
   const { schedules } = state.schedules;
   return schedules.find((schedule) => +schedule.id === +id);
 };

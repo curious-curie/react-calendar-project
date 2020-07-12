@@ -1,14 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ScheduleForm from '@/components/Form/ScheduleForm';
-import {
-  createSchedule,
-  createRepeatedSchedules,
-  editRepeatedSchedules,
-  deleteRepeatedSchedules,
-} from '../modules/schedules';
+import { createSchedule, createRepeatedSchedules } from '../modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
 import RRule from 'rrule';
 
