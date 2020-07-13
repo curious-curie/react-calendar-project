@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { format, isSameDay, isBefore } from 'date-fns';
+import { format, isSameDay, isBefore, addMinutes } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from '../Label/LabelPicker';
 import styled from 'styled-components';
 import RRule from 'rrule';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
+import Reservation from '../Reservation';
 
 const FormWrapper = styled.div`
   padding: 20px;
@@ -78,7 +79,19 @@ const RepeatLabel = styled.span`
   margin-right: 16px;
 `;
 
-function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaultDate }) {
+const ReservationInfo = styled.li`
+  margin: 16px;
+`;
+
+function ScheduleForm({
+  handleSubmit,
+  handleReservation,
+  presetData,
+  presetReservation,
+  readOnly,
+  defaultLabel,
+  defaultDate,
+}) {
   //TODO: 반복일정
   const uniqueId = require('lodash.uniqueid');
 
@@ -107,12 +120,15 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
           id: +uniqueId(),
           repeated: false,
           repeatRule: RRule.DAILY,
+          reservation: null,
         }
   );
   const [isAllDay, setIsAllDay] = useState(false);
   const [repeated, setRepeated] = useState(false);
   const [repeatRule, setRepeatRule] = useState(RRule.DAILY);
   const [submitted, setSubmitted] = useState(false);
+  const [reservation, setReservation] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (presetData) {
@@ -149,9 +165,7 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
     e.preventDefault();
     setSubmitted(true);
     if (schedule.title && schedule.end && schedule.start && isDateValid) {
-      const id = presetData?.id ?? +uniqueId();
-      const { start, end } = schedule;
-      setSchedule({ ...schedule, start: new Date(start), end: new Date(end), id: id });
+      if (schedule.reservation) handleReservation(reservation);
       handleSubmit(schedule);
     }
   };
@@ -172,6 +186,25 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
 
   const formatDate = (date) => {
     return format(date, 'yyyy-MM-dd HH:mm');
+  };
+
+  const onCreateReservation = (e) => {
+    setShowModal(false);
+    setSchedule((prev) => ({ ...prev, reservation: e.id }));
+    setReservation(e);
+  };
+
+  const openModal = () => {
+    if (isSameDay(schedule.start, schedule.end) && !schedule.repeated) setShowModal(true);
+    else alert('회의실 예약은 하루짜리 일정만 가능합니다');
+  };
+
+  const createTimeString = (array) => {
+    if (!presetData?.end) return '';
+    const startTime = array.sort()[0];
+    const endStart = array.sort().slice(-1);
+    const endTime = addMinutes(new Date(`${format(presetData.end, 'yyyy-MM-dd')} ${endStart}`), 30);
+    return `${startTime} ~ ${format(endTime, 'HH:mm')}`;
   };
 
   return (
@@ -267,6 +300,27 @@ function ScheduleForm({ handleSubmit, presetData, readOnly, defaultLabel, defaul
           레이블
           <LabelPicker readOnly={readOnly} handleSelect={handleSelectLabel} selected={schedule.label} />
         </FieldWrapper>
+        <FieldWrapper>
+          {!readOnly && <div onClick={openModal}>회의실 예약하기</div>}
+          {showModal && (
+            <Reservation
+              start={schedule?.start}
+              end={schedule?.end}
+              scheduleId={schedule.id}
+              onCreate={onCreateReservation}
+              onClose={() => setShowModal(false)}
+              isAllDay={isAllDay}
+              isModal
+            />
+          )}
+        </FieldWrapper>
+        {readOnly && presetReservation.id && (
+          <FieldWrapper>
+            회의실 예약 현황
+            <ReservationInfo>회의실: 회의실{+presetReservation.room + 1}</ReservationInfo>
+            <ReservationInfo>시간: {createTimeString(presetReservation.time)}</ReservationInfo>
+          </FieldWrapper>
+        )}
         {!readOnly && <BottomButton>{bottomButtonTitle}</BottomButton>}
       </form>
     </FormWrapper>
