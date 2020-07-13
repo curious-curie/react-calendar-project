@@ -27,6 +27,7 @@ const timeSlotArray = [
 ];
 
 const Wrapper = styled.div`
+  margin: 16px 0;
   ${({ isModal }) =>
     isModal &&
     `position: fixed;
@@ -89,6 +90,8 @@ const SubmitButton = styled.button`
 `;
 
 const SmallText = styled.div`
+  height: 24px;
+  padding-top: 4px;
   font-size: 8px;
   color: #ccc;
 `;
@@ -174,11 +177,11 @@ export default function Reservation({
     return prevItem || nextItem;
   };
 
-  const handleSelect = (index, key) => {
+  const handleSelect = (index, key, all = false) => {
     if (readOnly || !checkIsAvailable(index, key)) {
       return;
     }
-    if (selectedTime.length && (selectedRoom !== index || !isContinuous(index, key))) {
+    if (!all && selectedTime.length && (selectedRoom !== index || !isContinuous(index, key))) {
       setCurrent(defaultReservation);
       setSelectedTime([]);
     }
@@ -194,6 +197,14 @@ export default function Reservation({
     );
     setSelectedRoom(index);
     setSelectedTime((prev) => [...prev, key]);
+  };
+
+  const handleSelectAll = (index) => {
+    setCurrent(defaultReservation);
+    setSelectedTime([]);
+    Object.keys(emptyReservation[index]).forEach((key) => {
+      handleSelect(index, key, true);
+    });
   };
 
   const checkIsAvailable = (index, key) => {
@@ -216,6 +227,7 @@ export default function Reservation({
     <SlotWrapper>
       <TimeColumn>
         <SlotTitle>time</SlotTitle>
+        <SlotTitle>-</SlotTitle>
         {timeSlotArray.map((time) => (
           <TimeSlot key={time} available={true} time={true}>
             {time}
@@ -225,6 +237,10 @@ export default function Reservation({
       {current.map((booking, index) => (
         <TimeColumn key={index}>
           <SlotTitle>room{index + 1}</SlotTitle>
+          <SlotTitle>
+            <SmallText onClick={() => handleSelectAll(index)}>전체선택</SmallText>
+          </SlotTitle>
+
           {getTimeSlot(booking, index)}
         </TimeColumn>
       ))}
