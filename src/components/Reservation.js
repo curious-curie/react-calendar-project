@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format, differenceInHours, addMinutes } from 'date-fns';
-
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { createDateArray } from '../utils/dateHelpers';
 
@@ -100,9 +100,9 @@ export default function Reservation({
   onCreate,
   onClose,
   isModal,
+  readOnly,
 }) {
   const reservations = useSelector((state) => state.schedules.reservations);
-  const dispatch = useDispatch();
   const uniqueId = require('lodash.uniqueid');
   const defaultSlot = timeSlotArray.reduce((a, time) => ((a[time] = false), a), {});
 
@@ -111,9 +111,22 @@ export default function Reservation({
   const [selectedTime, setSelectedTime] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(-1);
   const [availableTime, setAvailableTime] = useState({});
+  const emptyReservation = Array(5).fill(defaultSlot);
   const [defaultReservation, setDefaultReservation] = useState(Array(5).fill(defaultSlot));
 
   // const timeAvailablity = timeSlotArray.map((time) => {});
+  const { schedules } = useSelector((state) => state.schedules);
+
+  const getScheduleBlock = (id) => {
+    const schedule = schedules.find((item) => item.id === id);
+    return schedule ? (
+      <Link to={`/${schedule.id}`}>
+        <div>{schedule.title}</div>
+      </Link>
+    ) : (
+      <></>
+    );
+  };
 
   useEffect(() => {
     const dateArray = createDateArray({ start, end });
@@ -131,7 +144,7 @@ export default function Reservation({
         : (Object.is(startDiff, -0) || startDiff < 0) && (Object.is(endDiff, 0) || endDiff > 0);
     });
     setAvailableTime(available);
-    let preset = [...defaultReservation];
+    let preset = [...emptyReservation];
     let presetReservation;
     if (reservations[date]) {
       reservations[date].forEach((item) => {
@@ -162,7 +175,7 @@ export default function Reservation({
   };
 
   const handleSelect = (index, key) => {
-    if (!checkIsAvailable(index, key)) {
+    if (readOnly || !checkIsAvailable(index, key)) {
       return;
     }
     if (selectedTime.length && (selectedRoom !== index || !isContinuous(index, key))) {
@@ -193,8 +206,8 @@ export default function Reservation({
   const getTimeSlot = (slots, room) => {
     return Object.keys(slots).map((key) => (
       <TimeSlot key={key} onClick={() => handleSelect(room, key)} available={checkIsAvailable(room, key)}>
-        {slots[key] === scheduleId && <Overlay />}
-        {slots[key] === 'prev' && <SmallText>기존 예약</SmallText>}
+        {!readOnly && slots[key] === scheduleId && <Overlay />}
+        {slots[key] === 'prev' ? <SmallText>기존 예약</SmallText> : slots[key] && getScheduleBlock(slots[key])}
       </TimeSlot>
     ));
   };
@@ -232,10 +245,12 @@ export default function Reservation({
   return (
     <Wrapper isModal={isModal}>
       {currentTimeSlots}
-      <SlotWrapper>
-        <SubmitButton onClick={onClose}>취소</SubmitButton>
-        <SubmitButton onClick={handleSubmit}>예약</SubmitButton>
-      </SlotWrapper>
+      {!readOnly && (
+        <SlotWrapper>
+          <SubmitButton onClick={onClose}>취소</SubmitButton>
+          <SubmitButton onClick={handleSubmit}>예약</SubmitButton>
+        </SlotWrapper>
+      )}
     </Wrapper>
   );
 }
