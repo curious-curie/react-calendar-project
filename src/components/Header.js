@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import CreateIcon from '@material-ui/icons/Create';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import styled from 'styled-components';
 
 const HeaderWrapper = styled.div`
@@ -22,11 +23,18 @@ const TabButton = styled.button`
   ${({ selected }) => selected && `background: #cfedfc;`}
 `;
 
+const Right = styled.div`
+  width: 40px;
+`;
+
 function Header({ location }) {
   return (
     <HeaderWrapper>
       <Link to="/search">
         <SearchIcon />
+      </Link>
+      <Link to="/reservations">
+        <LibraryBooksIcon />
       </Link>
       <div>
         <Link to="/">
@@ -37,7 +45,9 @@ function Header({ location }) {
         </Link>
       </div>
       <Link to="/new">
-        <CreateIcon />
+        <Right>
+          <CreateIcon />
+        </Right>
       </Link>
     </HeaderWrapper>
   );

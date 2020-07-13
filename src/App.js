@@ -8,6 +8,7 @@ import ScheduleCalendar from './components/Calendar/ScheduleCalendar';
 import ListUsingCal from './components/List/ListUsingCal';
 import SearchSchedule from './components/Search/SearchSchedule';
 import Header from './components/Header';
+import ReservationContainer from './containers/ReservationContainer';
 const GlobalStyle = createGlobalStyle`
   a {
     color: black;
@@ -26,6 +27,7 @@ function App() {
         <Route path="/new" component={ScheduleFormContainer} exact={true} />
         <Route path="/search" component={SearchSchedule} exact={true} />
         <Route path="/calist" component={ListUsingCal} exact={true} />
+        <Route path="/reservations" component={ReservationContainer} />
         <Route path="/:id" component={ScheduleDetailContainer} exact={true} />
       </Switch>
     </div>
