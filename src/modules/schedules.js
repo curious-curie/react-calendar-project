@@ -88,6 +88,7 @@ const initialState = {
   repeatedSchedules: {},
   repeatEnd: endOfYear(new Date()),
   reservations: {},
+  lastScheduleId: null,
 };
 
 export default function schedules(state = initialState, action) {
@@ -104,11 +105,11 @@ export default function schedules(state = initialState, action) {
         count[date] ? count[date]++ : (count[date] = 1);
       });
       const newSchedules = [...state.schedules, action.payload];
-      // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
         scheduleCount: count,
+        lastScheduleId: action.payload.id,
       };
     }
     case DELETE_SCHEDULE: {
@@ -117,7 +118,6 @@ export default function schedules(state = initialState, action) {
       const count = { ...state.scheduleCount };
       newDate.forEach((date) => count[date]--);
       const newSchedules = state.schedules.filter((schedule) => +schedule.id !== +id);
-      // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
@@ -140,7 +140,6 @@ export default function schedules(state = initialState, action) {
       nextDate.forEach((date) => {
         count[date] ? count[date]++ : (count[date] = 1);
       });
-      // localStorage.setItem('schedules', JSON.stringify(newSchedules));
       return {
         ...state,
         schedules: newSchedules,
@@ -182,9 +181,6 @@ export default function schedules(state = initialState, action) {
     case EDIT_REPEATED_SCHEDULES: {
       const schedule = action.payload;
       const id = schedule.id.toString().split('-')[0];
-      // const newSchedules = state.repeatedSchedules[schedule.id].map((item) => {
-      //   return { ...action.payload, id: item.id, start: item.start, end: item.end };
-      // });
       const newSchedules = getRepeatedSchedules(schedule, state.repeatEnd);
       const newRepeatedSchedules = { ...state.repeatedSchedules };
       newRepeatedSchedules[id] = newSchedules;
@@ -222,7 +218,7 @@ export default function schedules(state = initialState, action) {
       let newReservation = { ...state.reservations };
       newReservation = {
         ...state.reservations,
-        [date]: state.reservations[date].filter((item) => +item.id !== +booking.id),
+        [date]: state.reservations[date]?.filter((item) => +item.id !== +booking.id),
       };
       return {
         ...state,
@@ -264,5 +260,6 @@ const getRepeatedSchedules = (schedule, until) => {
   const createdSchedules = startArrays.map((date, index) => {
     return { ...schedule, start: date, end: endArrays[index], id: `${scheduleId}-${index + offset}` };
   });
+
   return createdSchedules.slice(1);
 };

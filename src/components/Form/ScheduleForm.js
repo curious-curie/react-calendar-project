@@ -7,6 +7,7 @@ import RRule from 'rrule';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
 import Reservation from '@/components/Reservation/Reservation';
+import { useSelector } from 'react-redux';
 
 const FormWrapper = styled.div`
   padding: 20px;
@@ -92,9 +93,8 @@ function ScheduleForm({
   defaultLabel,
   defaultDate,
 }) {
-  //TODO: 반복일정
   const uniqueId = require('lodash.uniqueid');
-
+  const lastId = useSelector((state) => state.schedules.lastScheduleId);
   const repeatFields = [
     { name: '매일', value: RRule.DAILY },
     { name: '매주', value: RRule.WEEKLY },
@@ -117,7 +117,7 @@ function ScheduleForm({
           start: defaultDate ? new Date(defaultDate) : new Date(),
           end: defaultDate ? new Date(defaultDate) : new Date(),
           label: defaultLabel,
-          id: +uniqueId(),
+          id: +uniqueId() + lastId,
           repeated: false,
           repeatRule: RRule.DAILY,
           reservation: null,
