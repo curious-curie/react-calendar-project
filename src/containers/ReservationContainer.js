@@ -8,6 +8,7 @@ export default function ReservationContainer() {
   const reservations = useSelector((state) => state.schedules.reservations);
   const reservationKeys = useMemo(() => Object.keys(reservations).map((item) => item), [reservations]);
   const [currentKey, setCurrentKey] = useState(reservationKeys[0] ? reservationKeys[0] : null);
+
   return reservationKeys.length ? (
     <div>
       <Select
