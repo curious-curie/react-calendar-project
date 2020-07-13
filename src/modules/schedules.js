@@ -10,6 +10,8 @@ const UPDATE_REPEAT_END = 'UPDATE_REPEAT_END';
 const CREATE_REPEATED_SCHEDULES = 'CREATE_REPEATED_SCHEDULES';
 const EDIT_REPEATED_SCHEDULES = 'EDIT_REPEATED_SCHEDULES';
 const DELETE_REPEATED_SCHEDULES = 'DELETE_REPEATED_SCHEDULES';
+const CREATE_RESERVATION = 'CREATE_RESERVATION';
+const DELETE_RESERVATION = 'DELETE_RESERVATION';
 
 export const getSchedules = () => {
   // const schedules = JSON.parse(localStorage.getItem('schedules'));
@@ -67,11 +69,42 @@ export const deleteRepeatedSchedules = (schedule) => {
   };
 };
 
+export const createReservation = (reservation) => {
+  return {
+    type: CREATE_RESERVATION,
+    payload: reservation,
+  };
+};
+
+export const deleteReservation = (reservation) => {
+  return {
+    type: DELETE_RESERVATION,
+    payload: reservation,
+  };
+};
 const initialState = {
   schedules: [],
   scheduleCount: [],
   repeatedSchedules: {},
   repeatEnd: endOfYear(new Date()),
+  reservations: {
+    '2020-07-13': [
+      {
+        date: '2020-07-13',
+        id: '16',
+        room: 0,
+        scheduleId: 34243247,
+        time: ['12:00', '12:30', '13:00'],
+      },
+      {
+        date: '2020-07-13',
+        id: '12',
+        room: 1,
+        scheduleId: 3234234324,
+        time: ['12:00', '12:30', '13:00'],
+      },
+    ],
+  },
 };
 
 export default function schedules(state = initialState, action) {
@@ -184,6 +217,33 @@ export default function schedules(state = initialState, action) {
       return {
         ...state,
         repeatedSchedules: newRepeatedSchedules,
+      };
+    }
+    case CREATE_RESERVATION: {
+      const booking = action.payload;
+      const date = booking.date;
+      let newReservation = { ...state.reservations };
+      if (state.reservations[date]) {
+        newReservation = { ...state.reservations, [date]: [...state.reservations[date], action.payload] };
+      } else {
+        newReservation = { ...state.reservations, [date]: [action.payload] };
+      }
+      return {
+        ...state,
+        reservations: newReservation,
+      };
+    }
+    case DELETE_RESERVATION: {
+      const booking = action.payload;
+      const date = booking.date;
+      let newReservation = { ...state.reservations };
+      newReservation = {
+        ...state.reservations,
+        [date]: state.reservations[date].filter((item) => +item.id !== +booking.id),
+      };
+      return {
+        ...state,
+        reservations: newReservation,
       };
     }
     default:
