@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ScheduleForm from '@/components/Form/ScheduleForm';
-import { createSchedule, createRepeatedSchedules } from '../modules/schedules';
+import { createSchedule, createRepeatedSchedules, createReservation } from '../modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
-import RRule from 'rrule';
 
 function ScheduleFormContainer({ history, location }) {
   const dispatch = useDispatch();
@@ -26,9 +25,18 @@ function ScheduleFormContainer({ history, location }) {
     history.push('/');
   };
 
+  const handleReservation = (item) => {
+    dispatch(createReservation(item));
+  };
+
   return (
     <div>
-      <ScheduleForm handleSubmit={handleSubmit} defaultLabel={labels[0]} defaultDate={defaultDate} />
+      <ScheduleForm
+        handleSubmit={handleSubmit}
+        handleReservation={handleReservation}
+        defaultLabel={labels[0]}
+        defaultDate={defaultDate}
+      />
     </div>
   );
 }
