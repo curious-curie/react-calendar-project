@@ -153,7 +153,6 @@ export default function schedules(state = initialState, action) {
         const lastItem = v[v.length - 1];
         if (lastItem) {
           const createdSchedules = getRepeatedSchedules(lastItem, newRepeatEnd);
-          console.log(createdSchedules);
           if (state.repeatedSchedules[id]) {
             newSchedules[id] = [...state.repeatedSchedules[id], ...createdSchedules];
           }

@@ -32,10 +32,12 @@ const Wrapper = styled.div`
     isModal &&
     `position: fixed;
   background: #fff;
-  padding: 16px;
-  top: 50px;
+  padding: 8px;
+  top: 30px;
+  left: calc(50% - 150px);
   border: 1px solid #ececec;
   box-shadow: 5px 5px 5px #ececec;
+  width: 300px;
   `}
 `;
 const SlotWrapper = styled.div`
@@ -96,6 +98,14 @@ const SmallText = styled.div`
   font-size: 8px;
   color: #ccc;
 `;
+
+const TitleWrapper = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 4px;
+  text-align: center;
+`;
+
 export default function Reservation({
   isAllDay,
   start = new Date(),
@@ -125,7 +135,7 @@ export default function Reservation({
     const schedule = schedules.find((item) => item.id === id);
     return schedule ? (
       <Link to={`/${schedule.id}`}>
-        <div>{schedule.title}</div>
+        <TitleWrapper>{schedule.title}</TitleWrapper>
       </Link>
     ) : (
       <></>
@@ -148,6 +158,7 @@ export default function Reservation({
         : (format(start, 'HH:mm') === time || Object.is(startDiff, -0) || startDiff < 0) &&
           (Object.is(endDiff, 0) || endDiff > 0);
     });
+
     setAvailableTime(available);
     let preset = [...emptyReservation];
     let presetReservation;
