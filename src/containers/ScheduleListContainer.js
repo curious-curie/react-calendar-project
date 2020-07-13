@@ -13,6 +13,7 @@ export default function ScheduleListContainer() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [dates, setDates] = useState([new Date()]);
   const [target, setTarget] = useState(null);
+  const [hasRepeat, setHasRepeat] = useState(false);
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
   const { repeatEnd } = useSelector((state) => state.schedules);
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function ScheduleListContainer() {
   useEffect(() => {
     const newList = getSchedulesByDates(dates, filteredSchedules);
     setCurrentSchedules({ ...newList });
+    setHasRepeat(filteredSchedules.some((item) => item.repeated));
   }, [filteredSchedules]);
   // filter가 바뀐 경우 바뀐 스케쥴에 대해 배열 형태 변형하여 다시 set
 
@@ -61,7 +63,7 @@ export default function ScheduleListContainer() {
   return (
     <div>
       <LabelFilters />
-      <ScheduleList dates={listDates} schedules={currentSchedules} appendList={addMonth} />
+      <ScheduleList dates={listDates} schedules={currentSchedules} appendList={addMonth} hasRepeat={hasRepeat} />
       <div ref={setTarget}></div>
     </div>
   );

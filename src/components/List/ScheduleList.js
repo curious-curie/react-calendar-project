@@ -25,12 +25,14 @@ const CheckWrapper = styled.div`
   margin: 16px 0;
 `;
 
-export default function ScheduleList({ dates, schedules, appendList }) {
+export default function ScheduleList({ dates, schedules, appendList, hasRepeat }) {
   const getId = (item) => item?.id.toString().split('-')[0];
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    if (!showAll && Object.keys(schedules).length < 10) appendList();
+    if (!showAll && hasRepeat && Object.values(schedules).length < 15) {
+      appendList();
+    }
   }, [schedules, showAll]);
 
   return (
