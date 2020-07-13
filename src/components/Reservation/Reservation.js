@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format, differenceInHours, addMinutes } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { createDateArray } from '../utils/dateHelpers';
+import { useSelector } from 'react-redux';
+import { createDateArray } from '@/utils/dateHelpers';
 
 const timeSlotArray = [
   '10:00',
