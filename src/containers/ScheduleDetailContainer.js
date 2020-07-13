@@ -60,7 +60,7 @@ function ScheduleDetailContainer({ match, history }) {
   useEffect(() => {
     if (schedule?.start) {
       const currentReservations = reservations[format(schedule.start, 'yyyy-MM-dd')];
-      const foundReservation = currentReservations.find((item) => +item.scheduleId === +id);
+      const foundReservation = currentReservations?.find((item) => +item.scheduleId === +id);
       if (foundReservation) setReservation(foundReservation);
     }
   }, [schedule]);

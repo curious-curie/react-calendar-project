@@ -87,24 +87,7 @@ const initialState = {
   scheduleCount: [],
   repeatedSchedules: {},
   repeatEnd: endOfYear(new Date()),
-  reservations: {
-    '2020-07-13': [
-      {
-        date: '2020-07-13',
-        id: '16',
-        room: 0,
-        scheduleId: 34243247,
-        time: ['12:00', '12:30', '13:00'],
-      },
-      {
-        date: '2020-07-13',
-        id: '12',
-        room: 1,
-        scheduleId: 3234234324,
-        time: ['12:00', '12:30', '13:00'],
-      },
-    ],
-  },
+  reservations: {},
 };
 
 export default function schedules(state = initialState, action) {

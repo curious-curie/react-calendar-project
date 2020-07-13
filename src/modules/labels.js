@@ -55,7 +55,7 @@ const initialState = {
     {
       id: 2,
       title: '회사',
-      color: '#c5ebfe',
+      color: '#3eb5e0',
       visible: true,
     },
   ],

@@ -37,7 +37,7 @@ export default function ScheduleList({ dates, schedules }) {
       {dates.map((date) =>
         showAll || schedules[date] ? (
           <DateWrapper key={date}>
-            <div>{date}</div>
+            <div key={date}>{date}</div>
             <Item>
               {schedules[date] ? (
                 <div>
@@ -48,7 +48,7 @@ export default function ScheduleList({ dates, schedules }) {
                   ))}
                 </div>
               ) : (
-                <div>
+                <div key={date}>
                   <Link to={{ pathname: '/new', search: `?date=${date}` }}>
                     <EmptyWrapper>새 일정 만들기</EmptyWrapper>
                   </Link>
@@ -57,7 +57,7 @@ export default function ScheduleList({ dates, schedules }) {
             </Item>
           </DateWrapper>
         ) : (
-          <></>
+          <div key={date}></div>
         )
       )}
     </div>
