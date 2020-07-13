@@ -17,7 +17,7 @@ export default function ReservationContainer() {
         value={currentKey}
         onChange={(e) => setCurrentKey(e.target.value)}
       >
-        {reservationKeys.map((date) => (
+        {reservationKeys?.sort().map((date) => (
           <MenuItem key={date} value={date}>
             {date}
           </MenuItem>

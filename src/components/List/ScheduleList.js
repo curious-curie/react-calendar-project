@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ScheduleListItem from './ScheduleListItem';
@@ -25,9 +25,14 @@ const CheckWrapper = styled.div`
   margin: 16px 0;
 `;
 
-export default function ScheduleList({ dates, schedules }) {
+export default function ScheduleList({ dates, schedules, appendList }) {
   const getId = (item) => item?.id.toString().split('-')[0];
   const [showAll, setShowAll] = useState(true);
+
+  useEffect(() => {
+    if (!showAll && Object.keys(schedules).length < 10) appendList();
+  }, [schedules, showAll]);
+
   return (
     <div>
       <CheckWrapper>

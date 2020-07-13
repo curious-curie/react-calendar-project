@@ -53,8 +53,10 @@ function ScheduleDetailContainer({ match, history }) {
   };
 
   const handleReservation = (item) => {
-    dispatch(deleteReservation(reservation));
-    dispatch(createReservation(item));
+    if (item.room > -1) {
+      dispatch(deleteReservation(reservation));
+      dispatch(createReservation(item));
+    }
   };
 
   useEffect(() => {

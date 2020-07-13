@@ -69,6 +69,7 @@ const RightButton = styled.button`
 const SlotTitle = styled.div`
   text-align: center;
   font-weight: bold;
+  height: 24px;
 `;
 
 const Overlay = styled.div`
@@ -144,7 +145,8 @@ export default function Reservation({
       const endDiff = differenceInHours(end, endTime);
       available[time] = isAllDay
         ? true
-        : (Object.is(startDiff, -0) || startDiff < 0) && (Object.is(endDiff, 0) || endDiff > 0);
+        : (format(start, 'HH:mm') === time || Object.is(startDiff, -0) || startDiff < 0) &&
+          (Object.is(endDiff, 0) || endDiff > 0);
     });
     setAvailableTime(available);
     let preset = [...emptyReservation];
@@ -218,7 +220,11 @@ export default function Reservation({
     return Object.keys(slots).map((key) => (
       <TimeSlot key={key} onClick={() => handleSelect(room, key)} available={checkIsAvailable(room, key)}>
         {!readOnly && slots[key] === scheduleId && <Overlay />}
-        {slots[key] === 'prev' ? <SmallText>기존 예약</SmallText> : slots[key] && getScheduleBlock(slots[key])}
+        {slots[key] === 'prev' ? (
+          <SmallText>기존 예약</SmallText>
+        ) : (
+          readOnly && slots[key] && getScheduleBlock(slots[key])
+        )}
       </TimeSlot>
     ));
   };
@@ -227,7 +233,9 @@ export default function Reservation({
     <SlotWrapper>
       <TimeColumn>
         <SlotTitle>time</SlotTitle>
-        <SlotTitle>-</SlotTitle>
+        <SlotTitle>
+          <SmallText>(시작시간)</SmallText>
+        </SlotTitle>
         {timeSlotArray.map((time) => (
           <TimeSlot key={time} available={true} time={true}>
             {time}
@@ -238,9 +246,8 @@ export default function Reservation({
         <TimeColumn key={index}>
           <SlotTitle>room{index + 1}</SlotTitle>
           <SlotTitle>
-            <SmallText onClick={() => handleSelectAll(index)}>전체선택</SmallText>
+            <SmallText onClick={() => handleSelectAll(index)}>{readOnly ? ' ' : '전체선택'}</SmallText>
           </SlotTitle>
-
           {getTimeSlot(booking, index)}
         </TimeColumn>
       ))}

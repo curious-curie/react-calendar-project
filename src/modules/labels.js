@@ -46,19 +46,7 @@ export const deleteLabel = (label) => {
 };
 
 const initialState = {
-  labels: [
-    {
-      id: 1,
-      title: '기본',
-      visible: true,
-    },
-    {
-      id: 2,
-      title: '회사',
-      color: '#3eb5e0',
-      visible: true,
-    },
-  ],
+  labels: [],
   labelFilter: [],
 };
 

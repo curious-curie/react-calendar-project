@@ -61,8 +61,8 @@ export default function ScheduleListContainer() {
   return (
     <div>
       <LabelFilters />
-      <ScheduleList dates={listDates} schedules={currentSchedules} />
-      <div ref={setTarget} />
+      <ScheduleList dates={listDates} schedules={currentSchedules} appendList={addMonth} />
+      <div ref={setTarget}></div>
     </div>
   );
 }

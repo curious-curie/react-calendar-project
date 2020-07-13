@@ -137,6 +137,10 @@ function ScheduleForm({
     }
   }, [presetData]);
 
+  useEffect(() => {
+    setReservation(presetReservation);
+  }, [presetReservation]);
+
   const isDateValid = useMemo(
     () =>
       isBefore(new Date(schedule.start), new Date(schedule.end)) ||

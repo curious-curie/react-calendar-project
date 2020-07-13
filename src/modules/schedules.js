@@ -151,9 +151,12 @@ export default function schedules(state = initialState, action) {
       const newRepeatEnd = addYears(state.repeatEnd, 1);
       Object.entries(newSchedules).forEach(([id, v]) => {
         const lastItem = v[v.length - 1];
-        const createdSchedules = getRepeatedSchedules(lastItem, newRepeatEnd);
-        if (state.repeatedSchedules[id]) {
-          newSchedules[id] = [...state.repeatedSchedules[id], ...createdSchedules];
+        if (lastItem) {
+          const createdSchedules = getRepeatedSchedules(lastItem, newRepeatEnd);
+          console.log(createdSchedules);
+          if (state.repeatedSchedules[id]) {
+            newSchedules[id] = [...state.repeatedSchedules[id], ...createdSchedules];
+          }
         }
       });
       // update repeated schedules
