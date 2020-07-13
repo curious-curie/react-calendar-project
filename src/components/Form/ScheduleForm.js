@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import RRule from 'rrule';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
-import Reservation from '../Reservation';
+import Reservation from '@/components/Reservation/Reservation';
 
 const FormWrapper = styled.div`
   padding: 20px;

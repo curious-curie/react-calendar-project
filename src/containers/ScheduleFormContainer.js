@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ScheduleForm from '@/components/Form/ScheduleForm';
-import { createSchedule, createRepeatedSchedules, createReservation } from '../modules/schedules';
+import { createSchedule, createRepeatedSchedules, createReservation } from '@/modules/schedules';
 import { createIntervalArray } from '@/utils/dateHelpers';
 
 function ScheduleFormContainer({ history, location }) {

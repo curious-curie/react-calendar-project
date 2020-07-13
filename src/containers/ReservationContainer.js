@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
-import Reservation from '../components/Reservation';
+import Reservation from '@/components/Reservation/Reservation';
 
 export default function ReservationContainer() {
   const reservations = useSelector((state) => state.schedules.reservations);
