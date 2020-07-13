@@ -21,5 +21,4 @@ const persistConfig = {
 };
 const rootReducer = combineReducers({ labels, schedules });
 
-// export default persistReducer(persistConfig, rootReducer);
-export default rootReducer;
+export default persistReducer(persistConfig, rootReducer);
