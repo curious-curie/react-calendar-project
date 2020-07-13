@@ -57,7 +57,7 @@ button.rbc-input::-moz-focus-inner {
 .rbc-show-more {
   display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
   white-space: nowrap;
 }
 
@@ -203,7 +203,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-event {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: bold;
   border: none;
   box-sizing: border-box;

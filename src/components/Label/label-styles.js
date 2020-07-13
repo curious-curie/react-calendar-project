@@ -27,7 +27,7 @@ export const ColorContainer = styled.div`
 export const PaletteContainer = styled.div`
   display: flex;
   width: 300px;
-  padding: 16px;
+  padding: 4px 16px;
 `;
 
 export const TitleInput = styled.input`

@@ -15,7 +15,7 @@ import {
 } from './label-styles';
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
-  const colorList = ['#b49fdc', '#c5ebfe', '#fefd97', '#a5f8ce', '#fec9a7', '#f197c0'];
+  const colorList = ['#b49fdc', '#3eb5e0', '#f78080', '#a5f8ce', '#fea917', '#f197c0'];
   const defaultColor = '#62efd3';
   const dispatch = useDispatch();
   const { labels } = useSelector((state) => state.labels);
