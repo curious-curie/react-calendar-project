@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { format, isSameDay, isBefore, addMinutes } from 'date-fns';
+import { format, isSameDay, isBefore, addMinutes, differenceInMinutes } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from '../Label/LabelPicker';
 import styled from 'styled-components';
@@ -104,10 +104,13 @@ function ScheduleForm({
     { name: '매 주중마다', value: 'WK' },
     { name: '매 주말마다', value: 'WKD' },
   ];
-  const formatDefaultDate = (date) => {
-    return isAllDay ? format(date, 'yyyy-MM-dd') : format(date, "yyyy-MM-dd'T'HH:mm");
-  };
 
+  const formatDefaultDate = useCallback(
+    (date) => {
+      return isAllDay ? format(date, 'yyyy-MM-dd') : format(date, "yyyy-MM-dd'T'HH:mm");
+    },
+    [schedule?.end, schedule?.start, isAllDay]
+  );
   const [schedule, setSchedule] = useState(
     presetData
       ? { ...presetData }
@@ -142,12 +145,13 @@ function ScheduleForm({
     setReservation(presetReservation);
   }, [presetReservation]);
 
-  const isDateValid = useMemo(
-    () =>
+  const isDateValid = useMemo(() => {
+    const diff = differenceInMinutes(schedule.end, schedule.start);
+    return (
       isBefore(new Date(schedule.start), new Date(schedule.end)) ||
-      isSameDay(new Date(schedule.start), new Date(schedule.end)),
-    [schedule.start, schedule.end]
-  );
+      (isSameDay(new Date(schedule.start), new Date(schedule.end)) && diff >= 0)
+    );
+  }, [schedule.start, schedule.end]);
 
   const bottomButtonTitle = presetData ? '수정' : '만들기';
 

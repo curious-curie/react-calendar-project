@@ -26,6 +26,19 @@ const timeSlotArray = [
   '18:30',
 ];
 
+const hours = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+const minutes = ['00', '10', '20', '30', '40', '50'];
+
+const newTimeSlotArray = () => {
+  let arr = [];
+  hours.forEach((hour) => {
+    minutes.forEach((min) => {
+      arr.push(`${hour}:${min}`);
+    });
+  });
+  return arr;
+};
+
 const Wrapper = styled.div`
   margin: 16px 0;
   ${({ isModal }) =>
@@ -249,7 +262,7 @@ export default function Reservation({
         </SlotTitle>
         {timeSlotArray.map((time) => (
           <TimeSlot key={time} available={true} time={true}>
-            {time}
+            <TitleWrapper>{time}</TitleWrapper>
           </TimeSlot>
         ))}
       </TimeColumn>

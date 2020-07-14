@@ -61,6 +61,7 @@ function ScheduleCalendar({ history }) {
         style={{ height: 500 }}
         onSelectEvent={onSelectEvent}
         onRangeChange={onRangeChange}
+        onDrillDown={onRangeChange}
         views={{ month: true }}
         popup
         eventPropGetter={eventStyle}
