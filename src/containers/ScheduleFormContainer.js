@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { isAfter } from 'date-fns';
@@ -13,7 +13,7 @@ function ScheduleFormContainer({ history, location }) {
   const defaultDate = new URLSearchParams(location.search).get('date');
   const { labels } = useSelector((state) => state.labels);
 
-  const handleSubmit = (schedule) => {
+  const handleSubmit = useCallback((schedule) => {
     const includedDates = createIntervalArray([schedule.start, schedule.end]);
     if (isAfter(schedule.end, repeatEnd)) dispatch(updateRepeatEnd());
     if (includedDates.some((date) => scheduleCount[date] >= 100)) {
@@ -25,11 +25,11 @@ function ScheduleFormContainer({ history, location }) {
       dispatch(createRepeatedSchedules(schedule));
     }
     history.push('/');
-  };
+  }, []);
 
-  const handleReservation = (item) => {
+  const handleReservation = useCallback((item) => {
     dispatch(createReservation(item));
-  };
+  }, []);
 
   return (
     <div>

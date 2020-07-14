@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ScheduleForm from '@Components/Form/ScheduleForm';
+import styled from 'styled-components';
+import { format } from 'date-fns';
 import {
   editSchedule,
   deleteSchedule,
@@ -9,10 +11,8 @@ import {
   deleteRepeatedSchedules,
   createReservation,
   deleteReservation,
-} from '../modules/schedules';
+} from '@/modules/schedules';
 import { getScheduleById } from '@/selectors';
-import styled from 'styled-components';
-import { format } from 'date-fns';
 
 const EditButton = styled.button`
   padding: 8px;
@@ -39,26 +39,6 @@ function ScheduleDetailContainer({ match, history }) {
 
   const dispatch = useDispatch();
 
-  const handleEdit = (schedule) => {
-    dispatch(editSchedule(schedule));
-    if (schedule.repeated) dispatch(editRepeatedSchedules(schedule));
-    setIsEditing(false);
-  };
-
-  const handleDelete = () => {
-    dispatch(deleteSchedule(schedule));
-    if (reservation && schedule.reservation) dispatch(deleteReservation(reservation));
-    if (schedule.repeated) dispatch(deleteRepeatedSchedules(schedule));
-    history.push('/');
-  };
-
-  const handleReservation = (item) => {
-    if (item.room > -1) {
-      dispatch(deleteReservation(reservation));
-      dispatch(createReservation(item));
-    }
-  };
-
   useEffect(() => {
     if (schedule?.start) {
       const currentReservations = reservations[format(schedule.start, 'yyyy-MM-dd')];
@@ -66,6 +46,38 @@ function ScheduleDetailContainer({ match, history }) {
       if (foundReservation) setReservation(foundReservation);
     }
   }, [schedule]);
+
+  const handleEdit = useCallback((schedule) => {
+    dispatch(editSchedule(schedule));
+    if (schedule.repeated) dispatch(editRepeatedSchedules(schedule));
+    setIsEditing(false);
+  }, []);
+
+  const handleDelete = useCallback(() => {
+    dispatch(deleteSchedule(schedule));
+    if (reservation && schedule.reservation) dispatch(deleteReservation(reservation));
+    if (schedule.repeated) dispatch(deleteRepeatedSchedules(schedule));
+    history.push('/');
+  }, [schedule]);
+
+  const handleReservation = useCallback(
+    (item) => {
+      if (item.room > -1) {
+        dispatch(deleteReservation(reservation));
+        dispatch(createReservation(item));
+      }
+    },
+    [reservation]
+  );
+
+  const handleDeleteReservation = useCallback(
+    (item) => {
+      if (item.room > -1) {
+        dispatch(deleteReservation(reservation));
+      }
+    },
+    [reservation]
+  );
 
   return (
     <div>
@@ -76,6 +88,7 @@ function ScheduleDetailContainer({ match, history }) {
             readOnly={!isEditing}
             handleSubmit={handleEdit}
             handleReservation={handleReservation}
+            deleteReservation={handleDeleteReservation}
             presetReservation={reservation}
           />
           {!isEditing && (

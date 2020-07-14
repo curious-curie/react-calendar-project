@@ -25,12 +25,6 @@ export const resetFilter = () => {
   };
 };
 
-export const getLabels = () => {
-  return {
-    type: GET_LABELS,
-  };
-};
-
 export const createLabel = (label) => {
   return {
     type: CREATE_LABEL,
@@ -46,17 +40,18 @@ export const deleteLabel = (label) => {
 };
 
 const initialState = {
-  labels: [],
+  labels: [
+    {
+      id: 1,
+      title: '기본',
+      visible: true,
+    },
+  ],
   labelFilter: [],
 };
 
 export default function labels(state = initialState, action) {
   switch (action.type) {
-    case GET_LABELS:
-      return {
-        ...state,
-        labels: action.payload,
-      };
     case CREATE_LABEL: {
       const newLabels = [...state.labels, action.payload];
       return {
