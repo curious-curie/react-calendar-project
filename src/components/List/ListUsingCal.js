@@ -25,7 +25,7 @@ const formats = {
 
 function ScheduleCalendar({ history }) {
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
 
   const eventStyle = (event) => {
     const style = {

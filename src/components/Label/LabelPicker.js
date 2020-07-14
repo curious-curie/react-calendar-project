@@ -16,7 +16,7 @@ import {
 
 export default function LabelPicker({ readOnly, handleSelect, selected }) {
   const colorList = ['#b49fdc', '#3eb5e0', '#f78080', '#a5f8ce', '#fea917', '#f197c0'];
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
   const dispatch = useDispatch();
   const { labels } = useSelector((state) => state.labels);
   const validLabels = labels.filter((label) => label.visible);

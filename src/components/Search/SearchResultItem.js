@@ -32,7 +32,7 @@ const ItemDate = styled.div`
 `;
 
 export default function SearchResultItem({ item }) {
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
   const pathId = item?.id.toString().split('-')[0];
   const formattedDate = isSameDay(item.start, item.end)
     ? item.allDay

@@ -26,7 +26,7 @@ const formats = {
 function ScheduleCalendar({ history }) {
   const filteredSchedules = useSelector((state) => getFilteredSchedules(state));
   const { repeatEnd } = useSelector((state) => state.schedules);
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
 
   const dispatch = useDispatch();
 
