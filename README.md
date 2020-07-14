@@ -15,7 +15,6 @@
 - 항목별 정보 표시 - 시간, 타이틀, 라벨
 - 해당 스케줄 선택 시 상세보기 페이지로 이동
 - Intersection Observer 활용한 무한스크롤
-    - 
 - 상단 탭 사용하여 monthly / list 전환
 - 빈 날짜의 새 일정 만들기 선택하는 경우, create schedule page로 이동
     - date를 query param으로 넘겨 해당 날짜가 preselect 되어 있도록 구현함
