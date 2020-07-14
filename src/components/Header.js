@@ -38,7 +38,7 @@ function Header({ location }) {
       </Link>
       <div>
         <Link to="/">
-          <TabButton selected={location.pathname === '/'}>Monthly</TabButton>
+          <TabButton selected={location.pathname === '/'}>Calendar</TabButton>
         </Link>
         <Link to="/list">
           <TabButton selected={location.pathname === '/list'}>List</TabButton>

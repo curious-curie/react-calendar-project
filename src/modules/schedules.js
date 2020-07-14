@@ -14,7 +14,6 @@ const CREATE_RESERVATION = 'schedules/CREATE_RESERVATION';
 const DELETE_RESERVATION = 'schedules/DELETE_RESERVATION';
 
 export const getSchedules = () => {
-  // const schedules = JSON.parse(localStorage.getItem('schedules'));
   return {
     type: GET_SCHEDULES,
     payload: schedules,

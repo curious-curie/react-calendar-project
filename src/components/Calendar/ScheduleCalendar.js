@@ -20,6 +20,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const formats = {
+  timeGutterFormat: (date, culture, localizer) => localizer.format(date, 'H:mm', culture),
   weekdayFormat: (date, culture, localizer) => localizer.format(date, 'eee', culture),
 };
 
@@ -58,11 +59,12 @@ function ScheduleCalendar({ history }) {
         formats={formats}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500 }}
+        style={{ height: 600 }}
         onSelectEvent={onSelectEvent}
         onRangeChange={onRangeChange}
         onDrillDown={onRangeChange}
-        views={{ month: true }}
+        defaultView={'month'}
+        views={{ month: true, week: true, day: true }}
         popup
         eventPropGetter={eventStyle}
       />
