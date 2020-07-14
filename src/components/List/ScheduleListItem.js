@@ -33,7 +33,7 @@ export default function ScheduleListItem({ date, schedule }) {
   const { start, end, label, title, allDay } = schedule;
   const isStartDate = isSameDay(start, new Date(date));
   const isEndDate = isSameDay(end, new Date(date));
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
 
   const getTime = () => {
     if (allDay) return '종일';

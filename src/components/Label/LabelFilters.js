@@ -9,7 +9,7 @@ export default function LabelFilters() {
   const validLabels = labels.filter((label) => label.visible);
 
   const dispatch = useDispatch();
-  const defaultColor = '#62efd3';
+  const defaultColor = '#2be5c0';
 
   const isSelected = (label) => {
     return labelFilter.includes(label.id);
