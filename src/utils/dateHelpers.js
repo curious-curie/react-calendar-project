@@ -4,6 +4,7 @@ import {
   isSameMonth,
   addMonths,
   addDays,
+  isSameDay,
   lastDayOfMonth,
   eachDayOfInterval,
   startOfMonth,
@@ -43,9 +44,14 @@ export const getSchedulesByMonth = (currentDate, schedules) => {
   schedules.forEach((schedule) => {
     if (hasMonth(schedule, currentDate)) {
       const start = isBefore(schedule.start, startOfMonth(currentDate)) ? startOfMonth(currentDate) : schedule.start;
-      const end = isAfter(schedule.end, lastDayOfMonth(currentDate)) ? lastDayOfMonth(currentDate) : schedule.end;
-      if (isBefore(end, start)) return [];
-      const dateArray = createDateArray({ start, end });
+      const end =
+        isAfter(schedule.end, lastDayOfMonth(currentDate)) || isSameDay(schedule.end, lastDayOfMonth(currentDate))
+          ? lastDayOfMonth(currentDate)
+          : schedule.end;
+      if (!isSameDay(end, start) && isBefore(end, start)) {
+        return [];
+      }
+      let dateArray = isSameDay(end, start) ? createDateArray({ start, end: start }) : createDateArray({ start, end });
       dateArray.forEach((date) => {
         const items = newSchedules[date];
         newSchedules[date] = items ? [...items, schedule] : [schedule];
@@ -62,8 +68,12 @@ export const getSchedulesByDates = (dates, schedules) => {
       if (hasMonth(schedule, currentDate)) {
         const start = isBefore(schedule.start, startOfMonth(currentDate)) ? startOfMonth(currentDate) : schedule.start;
         const end = isAfter(schedule.end, lastDayOfMonth(currentDate)) ? lastDayOfMonth(currentDate) : schedule.end;
-        if (isBefore(end, start)) return [];
-        const dateArray = createDateArray({ start, end });
+        if (!isSameDay(end, start) && isBefore(end, start)) {
+          return [];
+        }
+        let dateArray = isSameDay(end, start)
+          ? createDateArray({ start, end: start })
+          : createDateArray({ start, end });
         dateArray.forEach((date) => {
           const items = newSchedules[date];
           newSchedules[date] = items ? [...items, schedule] : [schedule];
