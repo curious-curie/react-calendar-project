@@ -30,7 +30,9 @@ export const createDateArray = ({ start, end }) => {
 export const createIntervalArray = (dates) => {
   const start = new Date(dates[0]);
   const end = new Date(dates[1]);
-  return eachDayOfInterval({ start, end }).map((date) => format(date, 'yyyy-MM-dd'));
+  return isSameDay(start, end)
+    ? [format(start, 'yyyy-MM-dd')]
+    : eachDayOfInterval({ start, end }).map((date) => format(date, 'yyyy-MM-dd'));
 };
 
 export const createMonthArray = (date) => {

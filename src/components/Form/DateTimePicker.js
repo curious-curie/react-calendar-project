@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { format } from 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -16,19 +16,21 @@ const StyledTextField = styled(TextField)`
 `;
 
 export default function DateAndTimePickers({ isAllDay, invalid, name, handleChange, defaultDate }) {
-  const inputType = isAllDay ? 'date' : 'datetime-local';
-  const defaultValue = defaultDate
-    ? defaultDate
-    : isAllDay
-    ? format(new Date(), 'yyyy-MM-dd')
-    : format(new Date(), "yyyy-MM-dd'T'HH:mm");
+  const defaultValue = useMemo(() => {
+    const formatString = isAllDay ? 'yyyy-MM-dd' : "yyyy-MM-dd'T'HH:mm";
+    return defaultDate ? format(new Date(defaultDate), formatString) : format(new Date(), "yyyy-MM-dd'T'HH:mm");
+  }, [isAllDay, defaultDate]);
+
+  const inputType = useMemo(() => {
+    return isAllDay ? 'date' : 'datetime-local';
+  }, [isAllDay]);
 
   return (
     <Container invalid={invalid} noValidate>
       <StyledTextField
         id={inputType}
         type={inputType}
-        defaultValue={defaultValue}
+        value={defaultValue}
         name={name}
         InputLabelProps={{
           shrink: true,
