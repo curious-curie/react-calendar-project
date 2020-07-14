@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { format, isSameDay, isBefore, addMinutes } from 'date-fns';
 import DateTimePicker from './DateTimePicker';
 import LabelPicker from '../Label/LabelPicker';
@@ -92,6 +92,7 @@ function ScheduleForm({
   readOnly,
   defaultLabel,
   defaultDate,
+  deleteReservation,
 }) {
   const uniqueId = require('lodash.uniqueid');
   const lastId = useSelector((state) => state.schedules.lastScheduleId);
@@ -169,7 +170,15 @@ function ScheduleForm({
     e.preventDefault();
     setSubmitted(true);
     if (schedule.title && schedule.end && schedule.start && isDateValid) {
-      if (schedule.reservation) handleReservation(reservation);
+      if (schedule.reservation) {
+        if (
+          presetReservation?.id &&
+          (format(schedule.start, 'yyyy-MM-dd') !== reservation.date || !isSameDay(schedule.start, schedule.end))
+        ) {
+          alert('날짜 변경 시 회의실 예약을 다시 진행하지 않으면 예악은 삭제됩니다');
+          deleteReservation(reservation);
+        } else handleReservation(reservation);
+      }
       handleSubmit(schedule);
     }
   };
@@ -189,14 +198,14 @@ function ScheduleForm({
   };
 
   const formatDate = (date) => {
-    return format(date, 'yyyy-MM-dd HH:mm');
+    return presetData.allDay ? format(date, 'yyyy-MM-dd') : format(date, 'yyyy-MM-dd HH:mm');
   };
 
-  const onCreateReservation = (e) => {
+  const onCreateReservation = useCallback((e) => {
     setShowModal(false);
     setSchedule((prev) => ({ ...prev, reservation: e.id }));
     setReservation(e);
-  };
+  }, []);
 
   const openModal = () => {
     if (isSameDay(schedule.start, schedule.end) && !schedule.repeated) setShowModal(true);
