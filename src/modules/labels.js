@@ -1,9 +1,8 @@
-const GET_LABELS = 'GET_LABELS';
-const CREATE_LABEL = 'CREATE_LABEL';
-const DELETE_LABEL = 'DELETE_LABEL';
-const APPLY_FILTER = 'APPLY_FILTER';
-const REMOVE_FILTER = 'REMOVE_FILTER';
-const RESET_FILTER = 'RESET_FILTER';
+const CREATE_LABEL = 'labels/CREATE_LABEL';
+const DELETE_LABEL = 'labels/DELETE_LABEL';
+const APPLY_FILTER = 'labels/APPLY_FILTER';
+const REMOVE_FILTER = 'labels/REMOVE_FILTER';
+const RESET_FILTER = 'labels/RESET_FILTER';
 
 export const applyFilter = (id) => {
   return {
