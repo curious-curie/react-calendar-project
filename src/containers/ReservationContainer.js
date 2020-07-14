@@ -26,7 +26,7 @@ export default function ReservationContainer() {
           </MenuItem>
         ))}
       </Select>
-      <Reservation start={new Date(currentKey)} end={new Date(currentKey)} isAllDay readOnly />;
+      <Reservation start={new Date(currentKey)} end={new Date(currentKey)} isAllDay readOnly />
     </div>
   ) : (
     <div>회의실 예약 내역이 없습니다.</div>

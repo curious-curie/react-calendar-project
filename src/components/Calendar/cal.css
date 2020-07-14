@@ -84,6 +84,7 @@ button.rbc-input::-moz-focus-inner {
   font-size: 90%;
   min-height: 0;
   border-bottom: 1px solid #ddd;
+  position: relative;
 }
 
 /* .rbc-header + .rbc-header {
@@ -97,6 +98,9 @@ button.rbc-input::-moz-focus-inner {
 .rbc-header > a:active,
 .rbc-header > a:visited {
   color: inherit;
+  position: absolute;
+  top: 4px;
+  left: 4px;
   text-decoration: none;
 }
 
@@ -116,7 +120,6 @@ button.rbc-input::-moz-focus-inner {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
   font-size: 16px;
   position: relative;
   flex-direction: column-reverse;
@@ -218,7 +221,7 @@ button.rbc-input::-moz-focus-inner {
   color: #fff;
   cursor: pointer;
   width: 100%;
-  text-align: left;
+  text-align: center;
 }
 .rbc-slot-selecting .rbc-event {
   cursor: inherit;
