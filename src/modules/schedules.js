@@ -216,6 +216,7 @@ export default function schedules(state = initialState, action) {
     }
     case DELETE_RESERVATION: {
       const booking = action.payload;
+      if (!action.payload.id) return { ...state };
       const date = booking.date;
       let newReservation = { ...state.reservations };
       newReservation = {

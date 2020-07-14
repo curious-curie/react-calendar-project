@@ -6,7 +6,9 @@ import Reservation from '@/components/Reservation/Reservation';
 
 export default function ReservationContainer() {
   const reservations = useSelector((state) => state.schedules.reservations);
-  const reservationKeys = useMemo(() => Object.keys(reservations).map((item) => item), [reservations]);
+  const reservationKeys = useMemo(() => Object.keys(reservations).filter((item) => reservations[item].length), [
+    reservations,
+  ]);
   const [currentKey, setCurrentKey] = useState(reservationKeys[0] ? reservationKeys[0] : null);
 
   return reservationKeys.length ? (
