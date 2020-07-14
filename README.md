@@ -12,7 +12,11 @@
 - 모든 날짜 보기 / 일정 있는 날짜만 보기 toggle 가능
 - 항목별 정보 표시 - 시간, 타이틀, 라벨
 - 해당 스케줄 선택 시 상세보기 페이지로 이동
+<<<<<<< HEAD
 - ## Intersection Observer 활용한 무한스크롤
+=======
+- Intersection Observer 활용한 무한스크롤
+>>>>>>> 15ec8f77d1fdd42cbcb429b4de633ab8fb3b45e4
 - 상단 탭 사용하여 monthly / list 전환
 - 빈 날짜의 새 일정 만들기 선택하는 경우, create schedule page로 이동
   - date를 query param으로 넘겨 해당 날짜가 preselect 되어 있도록 구현함
