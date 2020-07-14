@@ -40,9 +40,8 @@ export default function ScheduleListContainer() {
   // date만 추가되는 경우 추가된 날짜의 스케쥴들만 가져와서 APPEND
 
   const addMonth = useCallback(() => {
-    const newDate = addMonths(currentDate, 1);
     setCurrentDate((currentDate) => addMonths(currentDate, 1));
-    setDates([...dates, newDate]);
+    setDates((dates) => [...dates, addMonths(dates[dates.length - 1], 1)]);
   }, [currentDate, dates]);
 
   useEffect(() => {

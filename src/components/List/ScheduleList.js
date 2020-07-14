@@ -49,7 +49,7 @@ export default function ScheduleList({ dates, schedules, appendList, hasRepeat }
               {schedules[date] ? (
                 <div>
                   {schedules[date].map((schedule) => (
-                    <Link key={schedule.id} to={`/${getId(schedule)}`}>
+                    <Link key={`${schedule.id}-${date}`} to={`/${getId(schedule)}`}>
                       <ScheduleListItem date={date} schedule={schedule} />
                     </Link>
                   ))}
