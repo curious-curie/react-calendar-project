@@ -85,7 +85,7 @@
 
 - 일정의 제목이나 메모에 해당 검색어가 포함되는 경우, 해당 일정 표시
 
-<!-- <img src="README%2041700353855341c2b0feb0edea353d9d/Untitled%203.png" alt="README%2041700353855341c2b0feb0edea353d9d/Untitled%203.png" style="zoom:50%;" /> -->
+<img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d5767ff3-1a7b-4952-8581-1572c685d777/Untitled.png" width="30%">
 
 ### 회의실 예약 기능
 
