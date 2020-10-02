@@ -64,7 +64,7 @@ function ScheduleCalendar({ history }) {
         onRangeChange={onRangeChange}
         onDrillDown={onRangeChange}
         defaultView={'month'}
-        views={{ month: true, week: true, day: true }}
+        views={{ month: true }}
         popup
         eventPropGetter={eventStyle}
       />
